@@ -1,9 +1,15 @@
-import buildAddUserDevice from "./add-userdevice";
+const buildAddUserDevice = require('./add-userdevice');
+const buildCreateAddUserDeviceRequest = require('./create-add-userdevice-request');
 
-const APIKEY = 'FakeApiKey';
-const mongoDBDataApiUrl = 'https://data.mongodb-api.com/app/data-bxinz/endpoint/data/beta';
+const proxyUrl = 'http://localhost:1080';
+const APPID = 'fakeAppId'
+const APIKEY = 'fakeApiKey';
 
+const createAddUserDeviceRequest = buildCreateAddUserDeviceRequest(APIKEY, proxyUrl);
+const addUserDevice = buildAddUserDevice(APPID, createAddUserDeviceRequest);
 
-const addUserDevice = buildAddUserDevice(APIKEY);
-
-export default addUserDevice;
+module.exports  = Object.freeze(
+    {
+        addUserDevice,
+    }
+);

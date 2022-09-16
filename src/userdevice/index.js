@@ -1,5 +1,6 @@
-import buildMakeUserDevice from "./userdevice"
+// import buildMakeUserDevice from "./userdevice"
+const buildMakeUserDevice = require('./userdevice');
 
 const makeUserDevice = buildMakeUserDevice();
 
-export default makeUserDevice
+module.exports = makeUserDevice

@@ -1,4 +1,4 @@
-export default function buildMakeUserDevice(){
+module.exports =  function buildMakeUserDevice(){
     return function makeUserDevice(
         {
             device,
@@ -23,19 +23,19 @@ export default function buildMakeUserDevice(){
             throw new Error('Userdevice must have an title.')
         }
 
-        if (!isOwner) {
+        if (isOwner == undefined) {
             throw new Error('Userdevice must have an isOwner.')
         }
 
-        if (!isAdmin) {
+        if (isAdmin == undefined) {
             throw new Error('Userdevice must have an isAdmin.')
         }
 
-        if (!isMonitor) {
+        if (isMonitor == undefined) {
             throw new Error('Userdevice must have an isMonitor.')
         }
 
-        if (!isArchiver) {
+        if (isArchiver == undefined) {
             throw new Error('Userdevice must have an isArchiver.')
         }
 
@@ -47,7 +47,16 @@ export default function buildMakeUserDevice(){
             getIsOwner: () => isOwner,
             getIsAdmin: () => isAdmin,
             getIsMonitor: () => isMonitor,
-            getIsArchiver: () => isArchiver
+            getIsArchiver: () => isArchiver,
+            toJson: toJson,
         })
+
+        function toJson(){
+            return {
+                device:device,
+                user: user,
+                title: title,
+            }
+        }
     }
 }
