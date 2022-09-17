@@ -18,7 +18,6 @@
   },
   "homepage": "https://github.com/mohsenxad/ir-hushyaar-api-panel-user-device#readme",
   "dependencies": {
-    "axios": "^0.27.2",
     "https-proxy-agent": "^5.0.1",
     "node-fetch": "^2.6.7"
   }

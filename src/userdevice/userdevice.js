@@ -48,14 +48,22 @@ module.exports =  function buildMakeUserDevice(){
             getIsAdmin: () => isAdmin,
             getIsMonitor: () => isMonitor,
             getIsArchiver: () => isArchiver,
-            toJson: toJson,
+            toBson: toBson,
         })
 
-        function toJson(){
+        function toBson(){
             return {
-                device:device,
-                user: user,
+                device:{
+                    "$oid": device._id,
+                },
+                user: {
+                    "$oid": user._id,
+                },
                 title: title,
+                isOwner: isOwner,
+                isAdmin: isAdmin, 
+                isMonitor: isMonitor, 
+                isArchiver: isArchiver
             }
         }
     }

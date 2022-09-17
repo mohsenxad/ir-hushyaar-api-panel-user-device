@@ -15,7 +15,7 @@ module.exports =  function buildCreateAddUserDeviceRequest(apikey ,proxyUrl){
                     collection:"userdevices",
                     database:"homeSecurity",
                     dataSource:"Cluster0",
-                    document: userDevice.toJson()
+                    document: userDevice.toBson()
                 }
             ),
             agent: proxyAgent

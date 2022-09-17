@@ -1,4 +1,3 @@
-var axios = require('axios');
 var fetch = require('node-fetch');
 
 module.exports =  function buildAddUserDevice(APPID,createAddUserDeviceRequest){

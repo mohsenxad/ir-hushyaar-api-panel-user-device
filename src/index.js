@@ -1,17 +1,18 @@
-// import addUserDevice from './use-cases/add-userdevice';
 const buildAddUserDevice = require('./use-cases/add-userdevice');
 
 const addUserDevice = buildAddUserDevice();
-
-console.log(addUserDevice)
 
 async function run(){
     try {
         let result = await addUserDevice(
             {
-                device: '123',
-                user: '123',
-                title: 'old title',
+                device: {
+                    _id: 'fakeDeviceId'
+                },
+                user: {
+                    _id : 'fakeUserId'
+                },
+                title: 'محل زندگی',
                 isOwner: false,
                 isAdmin: false,
                 isMonitor: false,
