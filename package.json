@@ -1,0 +1,24 @@
+{
+  "name": "ir-hushyaar-api-panel-user-device",
+  "version": "1.0.0",
+  "description": "User Device Micro Service For Panel API",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mohsenxad/ir-hushyaar-api-panel-user-device.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/mohsenxad/ir-hushyaar-api-panel-user-device/issues"
+  },
+  "homepage": "https://github.com/mohsenxad/ir-hushyaar-api-panel-user-device#readme",
+  "dependencies": {
+    "https-proxy-agent": "^5.0.1",
+    "node-fetch": "^2.6.7"
+  }
+}
