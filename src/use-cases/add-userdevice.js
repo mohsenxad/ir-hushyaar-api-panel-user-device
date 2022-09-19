@@ -1,10 +1,7 @@
 const makeUserDevice = require('../userdevice');
-const dataAccess = require('../data-access')
-
-console.log(dataAccess);
 
 
-module.exports = function buildAddUserDevice(){
+module.exports = function buildAddUserDevice(dataAccess){
 
     return async function addUserDevice(
         userDeviceInfo

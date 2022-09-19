@@ -1,6 +1,4 @@
-var fetch = require('node-fetch');
-
-module.exports =  function buildAddUserDevice(APPID,createAddUserDeviceRequest){
+module.exports =  function buildAddUserDevice(APPID, fetch, createAddUserDeviceRequest){
     return async function addUserDevice(
         userDevice
     ){
