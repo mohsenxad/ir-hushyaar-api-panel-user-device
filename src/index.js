@@ -1,7 +1,7 @@
 const userDeviceServices = require('./use-cases')(
-    process.env.MONGODB_DATAAPI_APPID,
-    process.env.MONGODB_DATAAPI_APIKEY,
-    process.env.PROXY_URL
+    'data-bxinz',
+    '4SHy2vABCZsYMqbk8tZL1YMAXfILgrQYOyt5T5gJ03YwVqN1zTwXRBQk8BshTy0p',
+    'http://localhost:1080'
 );
 
 module.exports = userDeviceServices;

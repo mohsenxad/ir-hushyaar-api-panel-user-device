@@ -1,6 +1,3 @@
-var fetch = require('node-fetch');
-const HttpsProxyAgent = require('https-proxy-agent');
-
 const buildAddUserDevice = require('./add-userdevice/src/add-userdevice');
 const buildCreateAddUserDeviceRequest = require('./add-userdevice/src/create-add-userdevice-request');
 
@@ -34,9 +31,6 @@ module.exports  = function(APPID, APIKEY, proxyUrl){
     }
 
     let proxyAgent = undefined;
-    if(proxyUrl){
-        proxyAgent = new HttpsProxyAgent(proxyUrl);
-    }
 
     const createAddUserDeviceRequest = buildCreateAddUserDeviceRequest(APIKEY,proxyAgent);
     const addUserDevice = buildAddUserDevice(APPID,fetch, createAddUserDeviceRequest);

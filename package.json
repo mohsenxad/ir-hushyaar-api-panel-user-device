@@ -19,11 +19,8 @@
   },
   "homepage": "https://github.com/mohsenxad/ir-hushyaar-api-panel-user-device#readme",
   "dependencies": {
-    "dotenv": "^16.0.2",
-    "express": "^4.18.1",
-    "https-proxy-agent": "^5.0.1",
-    "ir-hushyaar-middleware-panel-auth": "^1.0.7",
-    "node-fetch": "^2.6.7"
+    "cloudflare-router": "^3.0.0-beta8",
+    "ir-hushyaar-middleware-panel-auth": "^1.0.7"
   },
   "devDependencies": {
     "nodemon": "^2.0.20"
