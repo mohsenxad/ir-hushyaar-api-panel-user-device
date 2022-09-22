@@ -1,5 +1,13 @@
-const dataApi = require('./mongoDBDataAPI')
+module.exports =  function(
+    APPID,
+    APIKEY,
+    proxyUrl
+){
+    const dataApi = require('./mongoDBDataAPI')(APPID, APIKEY, proxyUrl)
 
-module.exports =  Object.freeze({
-    dataApi,
-});
+    return Object.freeze(
+        {
+            dataApi,
+        }
+    );
+}

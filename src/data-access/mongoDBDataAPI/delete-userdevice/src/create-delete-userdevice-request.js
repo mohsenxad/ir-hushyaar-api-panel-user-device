@@ -1,7 +1,14 @@
-module.exports =  function buildCreateAddUserDeviceRequest(apikey ,proxyAgent){
-    return function createAddUserDeviceRequest(userDevice){
+module.exports =  function buildCreateDeleteUserDeviceRequest(apikey ,proxyAgent){
+    return function createDeleteUserDeviceRequest(
+        userDeviceId
+    ){
+        const query = {
+            "_id": 
+                { 
+                    "$oid": userDeviceId
+                } 
+        };
         
-
         var options= {
             method:"POST",
             headers:
@@ -14,15 +21,15 @@ module.exports =  function buildCreateAddUserDeviceRequest(apikey ,proxyAgent){
                     collection:"userdevices",
                     database:"homeSecurity",
                     dataSource:"Cluster0",
-                    document: userDevice.toBson()
+                    filter: query
                 }
             )
         };
 
-
         if(proxyAgent){
             options.agent = proxyAgent;
         }
+
 
         return options;
     }

@@ -63,7 +63,12 @@ module.exports =  function buildMakeUserDevice(){
                 isOwner: isOwner,
                 isAdmin: isAdmin, 
                 isMonitor: isMonitor, 
-                isArchiver: isArchiver
+                isArchiver: isArchiver,
+                registerDate : {
+                    "$date": {
+                       "$numberLong": registerDate.toString()
+                    }
+                }
             }
         }
     }
