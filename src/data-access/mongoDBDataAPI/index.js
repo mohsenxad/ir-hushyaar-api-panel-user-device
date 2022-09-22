@@ -16,6 +16,7 @@ const buildGetAllUserDeviceByDevice = require('./getAll-userdevice-by-device/src
 const buildCreateGetAllUserDeviceByUserRequest = require('./getAll-userdevice-by-user/src/create-getAll-userdevice-by-user-request');
 const buildGetAllUserDeviceByUser = require('./getAll-userdevice-by-user/src/getAll-userdevice-by-user');
 
+const buildTranslateGetAllUserDeviceByUserResponse = require('./getAll-userdevice-by-user/src/translate-getAll-userdevice-by-user-response');
 const buildCreateGetAllUserDeviceByDeviceAndUserRequest = require('./get-userdevice-by-device-and-user/src/create-get-userdevice-by-device-and-user-request');
 const buildGetAllUserDeviceByDeviceAndUser = require('./get-userdevice-by-device-and-user/src/get-userdevice-by-device-and-user');
 
@@ -50,7 +51,8 @@ module.exports  = function(APPID, APIKEY, proxyUrl){
     const getAllUserDeviceByDevice = buildGetAllUserDeviceByDevice(APPID,fetch,createGetAllUserDeviceByDeviceRequest)
 
     const createGetAllUserDeviceByUserRequest = buildCreateGetAllUserDeviceByUserRequest(APIKEY, proxyAgent);
-    const getAllUserDeviceByUser = buildGetAllUserDeviceByUser(APPID,fetch,createGetAllUserDeviceByUserRequest)
+    const translateGetAllUserDeviceByUserResponse = buildTranslateGetAllUserDeviceByUserResponse();
+    const getAllUserDeviceByUser = buildGetAllUserDeviceByUser(APPID,fetch,createGetAllUserDeviceByUserRequest,translateGetAllUserDeviceByUserResponse)
 
     const createGetAllUserDeviceByDeviceAndUserRequest = buildCreateGetAllUserDeviceByDeviceAndUserRequest(APIKEY, proxyAgent);
     const getAllUserDeviceByDeviceAndUser = buildGetAllUserDeviceByDeviceAndUser(APPID,fetch,createGetAllUserDeviceByDeviceAndUserRequest);

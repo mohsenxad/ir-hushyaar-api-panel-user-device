@@ -4,6 +4,7 @@
   "description": "User Device Micro Service For Panel API",
   "main": "index.js",
   "scripts": {
+    "serve": "nodemon index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -18,7 +19,14 @@
   },
   "homepage": "https://github.com/mohsenxad/ir-hushyaar-api-panel-user-device#readme",
   "dependencies": {
+    "dotenv": "^16.0.2",
+    "express": "^4.18.1",
     "https-proxy-agent": "^5.0.1",
+    "ir-hushyaar-middleware-panel-auth": "^1.0.7",
     "node-fetch": "^2.6.7"
-  }
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.20"
+  },
+  "port": 3001
 }
