@@ -16,3 +16,7 @@ jobs:
         with:
           apiToken: ${{ secrets.CF_API_TOKEN }}
           accountId: ${{ secrets.CF_ACCOUNT_ID }}
+        env:
+          MONGODB_DATAAPI_APPID: ${{ secrets.MONGODB_DATAAPI_APPID }}
+          MONGODB_DATAAPI_APIKEY: ${{ secrets.MONGODB_DATAAPI_APIKEY }}
+          PROXY_URL: ${{ secrets.PROXY_URL }}
