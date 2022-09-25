@@ -6,18 +6,13 @@ on:
       - worker
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v1
-      - name: Install dependencies
-        run: npm install
   deploy:
     runs-on: ubuntu-latest
     name: Deploy
-    needs: build
     steps:
       - uses: actions/checkout@v3
+      - name: Install dependencies
+        run: npm install
       - name: Publish app
         uses: cloudflare/wrangler-action@2.0.0
         with:
