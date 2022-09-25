@@ -16,7 +16,7 @@ jobs:
         with:
           apiToken: ${{ secrets.CF_API_TOKEN }}
           accountId: ${{ secrets.CF_ACCOUNT_ID }}
-          type: 'webpack'
+          wranglerVersion: "1.19.4"
           command: publish index.js --compatibility-date 2022-09-22 --name ir-hushyaar-api-panel-user-device
         env:
           MONGODB_DATAAPI_APPID: ${{ secrets.MONGODB_DATAAPI_APPID }}
