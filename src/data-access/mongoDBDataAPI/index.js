@@ -12,8 +12,8 @@ const buildGetAllUserDeviceByDevice = require('./getAll-userdevice-by-device/src
 
 const buildCreateGetAllUserDeviceByUserRequest = require('./getAll-userdevice-by-user/src/create-getAll-userdevice-by-user-request');
 const buildGetAllUserDeviceByUser = require('./getAll-userdevice-by-user/src/getAll-userdevice-by-user');
-
 const buildTranslateGetAllUserDeviceByUserResponse = require('./getAll-userdevice-by-user/src/translate-getAll-userdevice-by-user-response');
+
 const buildCreateGetAllUserDeviceByDeviceAndUserRequest = require('./get-userdevice-by-device-and-user/src/create-get-userdevice-by-device-and-user-request');
 const buildGetAllUserDeviceByDeviceAndUser = require('./get-userdevice-by-device-and-user/src/get-userdevice-by-device-and-user');
 
