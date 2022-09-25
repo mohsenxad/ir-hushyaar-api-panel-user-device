@@ -17,7 +17,7 @@ jobs:
           apiToken: ${{ secrets.CF_API_TOKEN }}
           accountId: ${{ secrets.CF_ACCOUNT_ID }}
           wranglerVersion: "1.19.4"
-          command: publish index.js --name ir-hushyaar-api-panel-user-device
+          command: publish index.js
         env:
           MONGODB_DATAAPI_APPID: ${{ secrets.MONGODB_DATAAPI_APPID }}
           MONGODB_DATAAPI_APIKEY: ${{ secrets.MONGODB_DATAAPI_APIKEY }}
