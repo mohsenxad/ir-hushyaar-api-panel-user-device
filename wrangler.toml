@@ -4,3 +4,6 @@ compatibility_flags = []
 workers_dev = true
 compatibility_date = "2022-09-22"
 node_compat = true
+routes = [
+	{ pattern = "ir-hushyaar-api-panel-user-device.hushyaar.ir", custom_domain = true, zone_name = "hushyaar.ir" }
+]
