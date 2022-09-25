@@ -1,6 +1,6 @@
 name = "ir-hushyaar-api-panel-user-device"
 main = "./index.js"
-usage_model = 'unbound '
+usage_model = 'unbound'
 compatibility_flags = []
 workers_dev = true
 compatibility_date = "2022-09-22"
