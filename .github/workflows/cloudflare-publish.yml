@@ -6,9 +6,16 @@ on:
       - worker
 
 jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - name: Install dependencies
+        run: npm install
   deploy:
     runs-on: ubuntu-latest
     name: Deploy
+    needs: build
     steps:
       - uses: actions/checkout@v3
       - name: Publish app
