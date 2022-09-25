@@ -1,7 +1,6 @@
 name = "ir-hushyaar-api-panel-user-device"
-type = "webpack"
 main = "./index.js"
-usage_model = 'bundled'
+usage_model = 'unbound '
 compatibility_flags = []
 workers_dev = true
 compatibility_date = "2022-09-22"
