@@ -3,17 +3,74 @@ module.exports =  function buildCreateGetAllUserDeviceByDeviceAndUserRequest(api
         deviceId,
         userId
     ){
-        const query = {
-            "device": 
-                { 
-                    "$oid": deviceId
-                }, 
-            "user": 
-                { 
-                    "$oid": userId
+        const pipeline = [
+            {
+                "$match": {
+                    '$and': [
+                        {
+                            "user": 
+                                { 
+                                    "$oid": userId
+                                }
+                        },
+                        {
+                            "device": 
+                                { 
+                                    "$oid": deviceId
+                                } 
+                        }
+                    ]
                 }
-        };
-        
+                
+            },
+            {
+                "$lookup" : {
+                    from: "devices",
+                    localField : "device",
+                    foreignField: "_id",
+                    as: "deviceInfo"
+                }
+            },
+            {
+                "$unwind": '$deviceInfo'
+            },
+            {
+                "$lookup" : {
+                    from: "users",
+                    localField : "user",
+                    foreignField: "_id",
+                    as: "userInfo"
+                }
+            },
+            {
+                "$unwind": '$userInfo'
+            },
+            {
+                $set: {
+                    token: "$deviceInfo.token",
+                    title: "$deviceInfo.title",
+                    status: "$deviceInfo.status"
+                }
+            },
+            {
+                $set: {
+                    remaningDays: "$userInfo.remaningDays"
+                }
+            },
+            { 
+                $project: {
+                    registerDate: 0,
+                    deviceInfo: 0,
+                    userInfo: 0
+                }
+            }
+            
+                
+        ];
+
+
+
+
         var options= {
             method:"POST",
             headers:
@@ -26,11 +83,12 @@ module.exports =  function buildCreateGetAllUserDeviceByDeviceAndUserRequest(api
                     collection:"userdevices",
                     database:"homeSecurity",
                     dataSource:"Cluster0",
-                    filter: query,
+                    pipeline: pipeline
                     
                 }
             )
         };
+
 
         if(proxyAgent){
             options.agent = proxyAgent;

@@ -3,6 +3,42 @@ module.exports =  function buildCreateGetAllUserDeviceByDeviceRequest(apikey ,pr
         deviceId
     ){
 
+        const pipeline = [
+            {
+                "$match": {
+                    "device": 
+                        { 
+                            "$oid": deviceId
+                        } 
+                },
+            },
+            {
+                "$lookup" :{
+                    from: "users",
+                    localField : "user",
+                    foreignField: "_id",
+                    as: "userInfo"
+                }
+            },
+            {
+                "$unwind": '$userInfo'
+            },
+            {
+                $set: {
+                    title: "$userInfo.title",
+                    mobileNumber: "$userInfo.mobileNumber"
+                }
+            },
+            { 
+                $project: {
+                    userInfo: 0,
+                    registerDate: 0,
+                    user:0,
+                    device:0
+                }
+            }
+        ]
+
         var options= {
             method:"POST",
             headers:
@@ -15,31 +51,7 @@ module.exports =  function buildCreateGetAllUserDeviceByDeviceRequest(apikey ,pr
                     collection:"userdevices",
                     database:"homeSecurity",
                     dataSource:"Cluster0",
-                    pipeline: [
-                        {
-                            "$match": {
-                                "device": 
-                                    { 
-                                        "$oid": deviceId
-                                    } 
-                            },
-                        },
-                        {
-                            "$lookup" :{
-                                from: "users",
-                                localField : "user",
-                                foreignField: "_id",
-                                as: "userInfo"
-                            }
-                        },
-                        {
-                            $set: {
-                                userInfo: {
-                                    $arrayElemAt: ["$userInfo.title", 0] 
-                                }
-                            }
-                        }
-                    ]
+                    pipeline: pipeline
                     
                 }
             )

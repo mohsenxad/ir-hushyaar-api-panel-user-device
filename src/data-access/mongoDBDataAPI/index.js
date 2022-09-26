@@ -11,14 +11,16 @@ const buildCreateDeleteUserDeviceRequest = require('./delete-userdevice/src/crea
 const buildDeleteUserDevice = require('./delete-userdevice/src/delete-userdevice');
 
 const buildCreateGetAllUserDeviceByDeviceRequest = require('./getAll-userdevice-by-device/src/create-getAll-userdevice-by-device-request');
+const buildTranslateGetAllUserDeviceByDeviceResponse = require('./getAll-userdevice-by-device/src/translate-getAll-userdevice-by-device-response');
 const buildGetAllUserDeviceByDevice = require('./getAll-userdevice-by-device/src/getAll-userdevice-by-device');
 
 const buildCreateGetAllUserDeviceByUserRequest = require('./getAll-userdevice-by-user/src/create-getAll-userdevice-by-user-request');
 const buildGetAllUserDeviceByUser = require('./getAll-userdevice-by-user/src/getAll-userdevice-by-user');
-
 const buildTranslateGetAllUserDeviceByUserResponse = require('./getAll-userdevice-by-user/src/translate-getAll-userdevice-by-user-response');
-const buildCreateGetAllUserDeviceByDeviceAndUserRequest = require('./get-userdevice-by-device-and-user/src/create-get-userdevice-by-device-and-user-request');
-const buildGetAllUserDeviceByDeviceAndUser = require('./get-userdevice-by-device-and-user/src/get-userdevice-by-device-and-user');
+
+const buildCreateGetUserDeviceByDeviceAndUserRequest = require('./get-userdevice-by-device-and-user/src/create-get-userdevice-by-device-and-user-request');
+const buildTranslateGetUserDeviceByDeviceAndUserResponse = require('./get-userdevice-by-device-and-user/src/translate-get-userdevice-by-device-and-user-response');
+const buildGetUserDeviceByDeviceAndUser = require('./get-userdevice-by-device-and-user/src/get-userdevice-by-device-and-user');
 
 const buildCreateEditUserDeviceTitleRequest = require('./edit-userdevice-title/src/create-edit-userdevice-title-request');
 const buildEditUserDeviceTitle = require('./edit-userdevice-title/src/edit-userdevice-title');
@@ -48,14 +50,25 @@ module.exports  = function(APPID, APIKEY, proxyUrl){
     const deleteUserDevice = buildDeleteUserDevice(APPID,fetch, createDeleteUserDeviceRequest);
 
     const createGetAllUserDeviceByDeviceRequest = buildCreateGetAllUserDeviceByDeviceRequest(APIKEY, proxyAgent);
-    const getAllUserDeviceByDevice = buildGetAllUserDeviceByDevice(APPID,fetch,createGetAllUserDeviceByDeviceRequest)
+    const translateGetAllUserDeviceByDeviceResponse = buildTranslateGetAllUserDeviceByDeviceResponse();
+    const getAllUserDeviceByDevice = buildGetAllUserDeviceByDevice(
+        APPID,
+        fetch,
+        createGetAllUserDeviceByDeviceRequest,
+        translateGetAllUserDeviceByDeviceResponse)
 
     const createGetAllUserDeviceByUserRequest = buildCreateGetAllUserDeviceByUserRequest(APIKEY, proxyAgent);
     const translateGetAllUserDeviceByUserResponse = buildTranslateGetAllUserDeviceByUserResponse();
     const getAllUserDeviceByUser = buildGetAllUserDeviceByUser(APPID,fetch,createGetAllUserDeviceByUserRequest,translateGetAllUserDeviceByUserResponse)
 
-    const createGetAllUserDeviceByDeviceAndUserRequest = buildCreateGetAllUserDeviceByDeviceAndUserRequest(APIKEY, proxyAgent);
-    const getAllUserDeviceByDeviceAndUser = buildGetAllUserDeviceByDeviceAndUser(APPID,fetch,createGetAllUserDeviceByDeviceAndUserRequest);
+    const createGetUserDeviceByDeviceAndUserRequest = buildCreateGetUserDeviceByDeviceAndUserRequest(APIKEY, proxyAgent);
+    const translateGetUserDeviceByDeviceAndUserResponse = buildTranslateGetUserDeviceByDeviceAndUserResponse();
+    const getUserDeviceByDeviceAndUser = buildGetUserDeviceByDeviceAndUser(
+        APPID,
+        fetch,
+        createGetUserDeviceByDeviceAndUserRequest,
+        translateGetUserDeviceByDeviceAndUserResponse
+        );
 
     const createEditUserDeviceTitleRequest = buildCreateEditUserDeviceTitleRequest(APIKEY, proxyAgent);
     const editUserDeviceTitle = buildEditUserDeviceTitle(APPID,fetch, createEditUserDeviceTitleRequest);
@@ -67,7 +80,7 @@ module.exports  = function(APPID, APIKEY, proxyUrl){
             deleteUserDevice,
             getAllUserDeviceByDevice,
             getAllUserDeviceByUser,
-            getAllUserDeviceByDeviceAndUser,
+            getUserDeviceByDeviceAndUser,
             editUserDeviceTitle
         }
     );
