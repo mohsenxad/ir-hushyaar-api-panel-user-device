@@ -49,7 +49,10 @@ router.get('/userDevice/getAllByUser',auth.chechAuth,async (req, event) =>
                 const userId = req.user;
                 const userDeviceList = await userDeviceServices.getAllUserDeviceByUser(userId);
                 const init = {
-                    headers: { 'content-type': 'application/json;charset=UTF-8', },
+                    headers: { 
+                        'content-type': 'application/json;charset=UTF-8',
+                        "Access-Control-Allow-Origin": "*"
+                    },
                 }
                 var result = {deviceList: userDeviceList};
                 return new Response(JSON.stringify(result, null, 2), init);
@@ -75,7 +78,10 @@ router.get('/userDevice/getByUserAndDevice',auth.chechAuth, authorization.checkU
             const deviceId = req.headers.get('deviceid');
             const userDevice = await userDeviceServices.getAllUserDeviceByDeviceAndUser(deviceId,userId);
             const init = {
-                headers: { 'content-type': 'application/json;charset=UTF-8', },
+                headers: { 
+                    'content-type': 'application/json;charset=UTF-8',
+                    "Access-Control-Allow-Origin": "*"
+                },
             }
             var result = {device: userDevice};
             return new Response(JSON.stringify(result, null, 2), init);
@@ -96,7 +102,10 @@ router.get('/userDevice/getByDevice',auth.chechAuth, authorization.checkUserDevi
             const deviceId = req.headers.get('deviceid');
             const userDeviceList = await userDeviceServices.getAllUserDeviceByDevice(deviceId);
             const init = {
-                headers: { 'content-type': 'application/json;charset=UTF-8', },
+                headers: { 
+                    'content-type': 'application/json;charset=UTF-8',
+                    "Access-Control-Allow-Origin": "*"
+                },
             }
             var result = {subscriberList: userDeviceList};
             return new Response(JSON.stringify(result, null, 2), init);
