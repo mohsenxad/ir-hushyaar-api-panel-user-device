@@ -22,7 +22,11 @@ jobs:
             MONGODB_DATAAPI_APPID
             MONGODB_DATAAPI_APIKEY
             PROXY_URL
+            UPSTASH_REDIS_REST_TOKEN
+            UPSTASH_REDIS_REST_URL
         env:
           MONGODB_DATAAPI_APPID : ${{ secrets.MONGODB_DATAAPI_APPID }}
           MONGODB_DATAAPI_APIKEY: ${{ secrets.MONGODB_DATAAPI_APIKEY }}
           PROXY_URL: ${{ secrets.PROXY_URL }}
+          UPSTASH_REDIS_REST_TOKEN: ${{ secrets.UPSTASH_REDIS_REST_TOKEN }}
+          UPSTASH_REDIS_REST_URL: ${{ secrets.UPSTASH_REDIS_REST_URL }}
