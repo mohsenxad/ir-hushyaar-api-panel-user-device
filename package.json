@@ -20,7 +20,8 @@
   "homepage": "https://github.com/mohsenxad/ir-hushyaar-api-panel-user-device#readme",
   "dependencies": {
     "cloudflare-router": "^3.0.0-beta8",
-    "ir-hushyaar-middleware-panel-auth": "^1.0.8"
+    "ir-hushyaar-middleware-panel-auth": "1.0.8",
+    "ir-hushyaar-middleware-panel-authorization": "1.0.1",
   },
   "port": 3001
 }

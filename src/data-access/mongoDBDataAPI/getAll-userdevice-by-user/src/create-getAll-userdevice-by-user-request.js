@@ -3,6 +3,54 @@ module.exports =  function buildCreateGetAllUserDeviceByUserRequest(apikey ,prox
         userId
     ){
 
+        const pipeline = [
+            {
+                "$match": {
+                    "user": 
+                        { 
+                            "$oid": userId
+                        } 
+                },
+            },
+            {
+                "$lookup" : {
+                    from: "devices",
+                    localField : "device",
+                    foreignField: "_id",
+                    as: "deviceInfo"
+                }
+            },
+            {
+                $unwind: '$deviceInfo'
+            },
+            {
+                "$lookup" : {
+                    from: "users",
+                    localField : "user",
+                    foreignField: "_id",
+                    as: "userInfo"
+                }
+            },
+            {
+                $unwind: '$userInfo'
+            },
+            {
+                $set: {
+                    _id: "$deviceInfo._id",
+                    token: "$deviceInfo.token",
+                    title: "$deviceInfo.title",
+                    status: "$deviceInfo.status"
+                }
+            },
+            {
+                $set: {
+                    remaningDays: "$userInfo.remaningDays"
+                }
+            }
+            
+                
+        ];
+
         var options= {
             method:"POST",
             headers:
@@ -15,64 +63,7 @@ module.exports =  function buildCreateGetAllUserDeviceByUserRequest(apikey ,prox
                     collection:"userdevices",
                     database:"homeSecurity",
                     dataSource:"Cluster0",
-                    pipeline: [
-                        {
-                            "$match": {
-                                "user": 
-                                    { 
-                                        "$oid": userId
-                                    } 
-                            },
-                        },
-                        {
-                            "$lookup" : {
-                                from: "devices",
-                                localField : "device",
-                                foreignField: "_id",
-                                as: "deviceInfo"
-                            }
-                        },
-                        {
-                            "$lookup" : {
-                                from: "users",
-                                localField : "user",
-                                foreignField: "_id",
-                                as: "userInfo"
-                            }
-                        },
-                        {
-                            $set: {
-                                deviceInfo: {
-                                    $arrayElemAt: ["$deviceInfo", 0] 
-                                },
-                                token: {
-                                    $arrayElemAt: ["$deviceInfo.token", 0] 
-                                },
-                                title: {
-                                    $arrayElemAt: ["$deviceInfo.title", 0] 
-                                },
-                                status: {
-                                    $arrayElemAt: ["$deviceInfo.status", 0] 
-                                }
-                            }
-                        },
-                        {
-                            $set: {
-                                userInfo: {
-                                    $arrayElemAt: ["$userInfo", 0] 
-                                },
-                                remaningDays: {
-                                    $arrayElemAt: ["$userInfo.remaningDays", 0] 
-                                }
-
-                            }
-                        },
-                        {
-                            $unwind: '$userInfo'
-                        }
-                        
-                            
-                    ]
+                    pipeline: pipeline
                     
                 }
             )

@@ -4,6 +4,13 @@ const auth = require('ir-hushyaar-middleware-panel-auth')(
   PROXY_URL
 );
 
+const authorization = require('ir-hushyaar-middleware-panel-authorization')(
+    process.env.MONGODB_DATAAPI_APPID,
+    process.env.MONGODB_DATAAPI_APIKEY,
+    process.env.PROXY_URL,
+    process.env.REDIS_URL
+)
+
 const packageJson = require('./package.json');
 const userDeviceServices = require('./src');
 
@@ -40,6 +47,7 @@ router.get('/userDevice/getAllByUser', async (req, res) => {
             });
     }
 })
+
 
 const corsHeaders = {
     'Access-Control-Allow-Origin': '*',
@@ -79,6 +87,53 @@ function handleOptions(request) {
       });
     }
   }
+
+// app.get('/userDevice/getByUserAndDevice', auth.chechAuth, authorization.checkUserDeviceAccess, async (req, res) =>
+// {
+//     try {
+//         const userId = req.user;
+//         const deviceId = req.headers.deviceid;
+//         const userDevice = await userDeviceServices.getAllUserDeviceByDeviceAndUser(deviceId,userId);
+//         res.json(
+//             {
+//                 device: userDevice
+//             }
+//         );
+//     } catch (error) {
+//         console.log(error);
+//         res.json(
+//             {
+//                 error: error
+//             }
+//         )
+//     }
+    
+// }
+// )
+
+// app.get('/userDevice/getByDevice', auth.chechAuth, authorization.checkUserDeviceAccess, async (req, res) =>
+// {
+//     try {
+//         const deviceId = req.headers.deviceid;
+//         const userDeviceList = await userDeviceServices.getAllUserDeviceByDevice(deviceId);
+//         res.json(
+//             {
+//                 subscriberList: userDeviceList
+//             }
+//         );
+//     } catch (error) {
+//         console.log(error);
+//         res.json(
+//             {
+//                 error: error
+//             }
+//         )
+//     }
+    
+// }
+// )
+
+
 
 addEventListener("fetch", event => {
     if(event.request.method === 'OPTIONS'){
