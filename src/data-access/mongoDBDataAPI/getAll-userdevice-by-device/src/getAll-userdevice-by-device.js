@@ -1,4 +1,9 @@
-module.exports =  function buildGetAllUserDeviceByDevice(APPID,fetch,createGetAllUserDeviceByDeviceRequest){
+module.exports =  function buildGetAllUserDeviceByDevice(
+    APPID,
+    fetch,
+    createGetAllUserDeviceByDeviceRequest,
+    translateGetAllUserDeviceByDeviceResponse
+){
     return async function getAllUserDeviceByDevice(
         deviceId
     ){
@@ -11,7 +16,8 @@ module.exports =  function buildGetAllUserDeviceByDevice(APPID,fetch,createGetAl
             options
         );
 
-        let response = await request.json();
-        return response;
+        const response = await request.json();
+        const userDeviceList = translateGetAllUserDeviceByDeviceResponse(response);
+        return userDeviceList;
     }
 }

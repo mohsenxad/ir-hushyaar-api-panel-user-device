@@ -4,7 +4,7 @@ module.exports = function buildGetAllUserDeviceByDeviceAndUser(dataAccess){
         deviceId,
         userId
     ){
-        const response = await dataAccess.dataApi.getAllUserDeviceByDeviceAndUser(
+        const response = await dataAccess.dataApi.getUserDeviceByDeviceAndUser(
             deviceId,
             userId
         )
