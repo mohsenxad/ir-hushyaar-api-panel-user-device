@@ -12,12 +12,14 @@ module.exports =  function buildEditUserDevicePermission(APPID,fetch,createEditU
             isArchiver
         );
 
-        let request = await fetch(
-            `https://data.mongodb-api.com/app/${APPID}/endpoint/data/v1/action/updateOne`,
+        const url = `https://data.mongodb-api.com/app/${APPID}/endpoint/data/v1/action/updateOne`;
+
+        const request = await fetch(
+            url,
             options
         );
 
-        let response = await request.json();
+        const response = await request.json();
         return response;
     }
 }

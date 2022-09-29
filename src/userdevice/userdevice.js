@@ -24,7 +24,7 @@ module.exports =  function buildMakeUserDevice(){
         }
 
         if (isOwner == undefined) {
-            throw new Error('Userdevice must have an isOwner.')
+            isOwner = false;
         }
 
         if (isAdmin == undefined) {
@@ -54,10 +54,10 @@ module.exports =  function buildMakeUserDevice(){
         function toBson(){
             return {
                 device:{
-                    "$oid": device._id,
+                    "$oid": device,
                 },
                 user: {
-                    "$oid": user._id,
+                    "$oid": user,
                 },
                 title: title,
                 isOwner: isOwner,

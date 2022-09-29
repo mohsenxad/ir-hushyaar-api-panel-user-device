@@ -1,19 +1,27 @@
-module.exports =  function buildEditUserDeviceTitle(APPID,fetch,createEditUserDeviceTitleRequest){
-    return async function editUserDeviceTitle(
-        userDeviceId,
-        title
-    ){
-        const options = createEditUserDeviceTitleRequest(
+module.exports =  function buildEditUserDeviceTitle(
+    APPID,
+    fetch,
+    createEditUserDeviceTitleRequest
+)
+    {
+        return async function editUserDeviceTitle(
             userDeviceId,
             title
-        );
+        )
+            {
+                const options = createEditUserDeviceTitleRequest(
+                    userDeviceId,
+                    title
+                );
 
-        let request = await fetch(
-            `https://data.mongodb-api.com/app/${APPID}/endpoint/data/v1/action/updateOne`,
-            options
-        );
+                const url = `https://data.mongodb-api.com/app/${APPID}/endpoint/data/v1/action/updateOne`;
 
-        let response = await request.json();
-        return response;
+                const request = await fetch(
+                    url,
+                    options
+                );
+
+                const response = await request.json();
+                return response;
+            }
     }
-}
