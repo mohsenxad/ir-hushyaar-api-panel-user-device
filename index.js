@@ -20,6 +20,7 @@ const authorization = require('ir-hushyaar-middleware-panel-authorization')(
 const packageJson = require('./package.json');
 const userDeviceServices = require('./src');
 
+
 import { Router } from 'itty-router'
 
 const router = new Router();
@@ -33,18 +34,7 @@ router.get("/", async (req, event) =>
 
 router.get('/userDevice/getAllByUser',auth.chechAuth,async (req, event) => 
     {
-            // console.log('here');
-            // const headers = event.request.headers;
-            // console.log(headers);
-            // console.log('deviceid')
-            // console.log(req.headers.get('deviceid'));
-            // req.headers.set("foo","bar");
-            // console.log('foo')
-            // console.log(req.headers.get('foo'));
-            // req.user = 'asdfsad';
-            console.log('user')
-            console.log(req.user);
-
+            console.time();
             try {
                 const userId = req.user;
                 const userDeviceList = await userDeviceServices.getAllUserDeviceByUser(userId);
@@ -55,6 +45,7 @@ router.get('/userDevice/getAllByUser',auth.chechAuth,async (req, event) =>
                     },
                 }
                 var result = {deviceList: userDeviceList};
+                console.timeEnd();
                 return new Response(JSON.stringify(result, null, 2), init);
             } catch (error) {
                 console.log(error);
@@ -71,8 +62,7 @@ router.get('/userDevice/getAllByUser',auth.chechAuth,async (req, event) =>
 
 router.get('/userDevice/getByUserAndDevice',auth.chechAuth, authorization.checkUserDeviceAccess ,async (req, event) => 
     {
-        console.log('accessList')
-        console.log(req.accessList);
+        console.time();
         try {
             const userId = req.user;
             const deviceId = req.headers.get('deviceid');
@@ -84,6 +74,7 @@ router.get('/userDevice/getByUserAndDevice',auth.chechAuth, authorization.checkU
                 },
             }
             var result = {device: userDevice};
+            console.timeEnd();
             return new Response(JSON.stringify(result, null, 2), init);
         } catch (error) {
             console.log(error);
@@ -185,37 +176,99 @@ function handleOptions(request) {
 
 
 
-// addEventListener("fetch", event => {
-//     if(event.request.method === 'OPTIONS'){
-//         event.respondWith(handleOptions(event.request));
-//     }else{
-//         return event.respondWith(
-//             router.serveRequest(event.request, {/* extra data */ })
-//                 .then(built => built.response)
-//         );
-//     }
-    
-// });
 
-// 404 for everything else
+// app.get('/userDevice/getByDevice', auth.chechAuth, authorization.checkUserDeviceAccess, async (req, res) =>
+//     {
+//         try {
+//             const deviceId = req.headers.deviceid;
+//             const userDeviceList = await userDeviceServices.getAllUserDeviceByDevice(deviceId);
+//             res.json(
+//                 {
+//                     subscriberList: userDeviceList
+//                 }
+//             );
+//         } catch (error) {
+//             console.log(error);
+//             res.json(
+//                 {
+//                     error: error
+//                 }
+//             )
+//         }
+        
+//     }
+// )
+
+// app.post('/userDevice/remove', auth.chechAuth, authorization.checkUserDeviceAccess,async (req, res) =>
+//     {
+//         try {
+//             const deviceId = req.headers.deviceid;
+//             const userDeviceId = req.body.userDeviceId;
+//             const deleteResult = await userDeviceServices.deleteUserDevice(userDeviceId);
+//             res.json(
+//                 {
+//                     result: deleteResult
+//                 }
+//             );
+//         } catch (error) {
+//             console.log(error);
+//             res.json(
+//                 {
+//                     error: error
+//                 }
+//             )
+//         }
+//     }
+// )
+
+// app.post('/userDevice/add', auth.chechAuth, authorization.checkUserDeviceAccess,async (req, res) =>
+//     {
+//         try {
+//             const deviceId = req.headers.deviceid;
+//             const userDeviceInfo = req.body;
+//             console.log(userDeviceInfo);
+//             const addResult = await userDeviceServices.addUserDevice(
+//                 req.user,
+//                 deviceId,
+//                 userDeviceInfo
+//             );
+//             res.json(
+//                 {
+//                     result: addResult
+//                 }
+//             );
+//         } catch (error) {
+//             console.log(error);
+//             res.json(
+//                 {
+//                     error: error
+//                 }
+//             )
+//         }
+//     }
+// )
+
+
+
 router.all('*', () => new Response('Not Found.', { status: 404 }))
+
 
 // attach the router "handle" to the event handler
 addEventListener('fetch', event =>
-{
-    
-    if(event.request.method === 'OPTIONS'){
-        event.respondWith(handleOptions(event.request));
-    }else{
-        const request = event.request
-        const url = event.request.url;
-        const modifiedRequest = new Request(url, {
-            body: request.body,
-            headers: request.headers,
-            method: request.method,
-            redirect: request.redirect
-        })
-        event.respondWith(router.handle(modifiedRequest, event))
+    {
+        
+        if(event.request.method === 'OPTIONS'){
+            event.respondWith(handleOptions(event.request));
+        }else{
+            const request = event.request
+            const url = event.request.url;
+            const modifiedRequest = new Request(url, {
+                body: request.body,
+                headers: request.headers,
+                method: request.method,
+                redirect: request.redirect
+            })
+            event.respondWith(router.handle(modifiedRequest, event))
+        }
     }
-}
 )

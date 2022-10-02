@@ -13,13 +13,14 @@ module.exports =  function buildGetUserDeviceByDeviceAndUser(
             userId
         );
 
-        let request = await fetch(
-            `https://data.mongodb-api.com/app/${APPID}/endpoint/data/v1/action/aggregate`,
+        const url = `https://data.mongodb-api.com/app/${APPID}/endpoint/data/v1/action/aggregate`;
+
+        const request = await fetch(
+            url,
             options
         );
 
         const response = await request.json();
-        console.log(response);
         const userDevice = translateGetUserDeviceByDeviceAndUserResponse(response)
         return userDevice;
     }

@@ -1,4 +1,5 @@
 const buildAddUserDevice = require('./add-userdevice/src/add-userdevice');
+const buildTranslateAddUserDeviceResponse = require('./add-userdevice/src/translate-add-userdevice-response');
 const buildCreateAddUserDeviceRequest = require('./add-userdevice/src/create-add-userdevice-request');
 
 const buildEditUserDevicePermission = require('./edit-userdevice-permission/src/edit-userdevice-permission');
@@ -22,6 +23,16 @@ const buildGetUserDeviceByDeviceAndUser = require('./get-userdevice-by-device-an
 const buildCreateEditUserDeviceTitleRequest = require('./edit-userdevice-title/src/create-edit-userdevice-title-request');
 const buildEditUserDeviceTitle = require('./edit-userdevice-title/src/edit-userdevice-title');
 
+const buildCreateGetUserByMobileNumberRequest = require('./get-user-by-mobileNumber/src/create-get-user-by-mobileNumber-request');
+const buildTranslateGetUserByMobileNumberResponse = require('./get-user-by-mobileNumber/src/translate-get-user-by-mobileNumber-response');
+const buildGetUserByMobileNumber = require('./get-user-by-mobileNumber/src/get-user-by-mobileNumber');
+
+const buildCreateAddUserRequest = require('./add-user/src/create-add-user-request');
+const buildTranslateAddUserResponse = require('./add-user/src/translate-add-user-response');
+const buildAddUser = require('./add-user/src/add-user');
+
+
+
 module.exports  = function(APPID, APIKEY, proxyUrl){
 
     if(!APPID){
@@ -34,8 +45,17 @@ module.exports  = function(APPID, APIKEY, proxyUrl){
 
     let proxyAgent = undefined;
 
-    const createAddUserDeviceRequest = buildCreateAddUserDeviceRequest(APIKEY,proxyAgent);
-    const addUserDevice = buildAddUserDevice(APPID,fetch, createAddUserDeviceRequest);
+    const createAddUserDeviceRequest = buildCreateAddUserDeviceRequest(
+        APIKEY,
+        proxyAgent
+    );
+    const translateAddUserDeviceResponse = buildTranslateAddUserDeviceResponse();
+    const addUserDevice = buildAddUserDevice(
+        APPID,
+        fetch,
+        createAddUserDeviceRequest,
+        translateAddUserDeviceResponse
+    );
 
     const createEditUserDevicePermissionRequest = buildCreateEditUserDevicePermissionRequest(APIKEY, proxyAgent);
     const editUserDevicePermission = buildEditUserDevicePermission(APPID,fetch, createEditUserDevicePermissionRequest);
@@ -67,6 +87,31 @@ module.exports  = function(APPID, APIKEY, proxyUrl){
     const createEditUserDeviceTitleRequest = buildCreateEditUserDeviceTitleRequest(APIKEY, proxyAgent);
     const editUserDeviceTitle = buildEditUserDeviceTitle(APPID,fetch, createEditUserDeviceTitleRequest);
 
+
+    const createGetUserByMobileNumberRequest = buildCreateGetUserByMobileNumberRequest(
+        APIKEY,
+        proxyAgent
+    );
+    const translateGetUserByMobileNumberResponse = buildTranslateGetUserByMobileNumberResponse();
+    const getUserByMobileNumber = buildGetUserByMobileNumber(
+        APPID,
+        fetch,
+        createGetUserByMobileNumberRequest,
+        translateGetUserByMobileNumberResponse
+    );
+
+    const createAddUserRequest = buildCreateAddUserRequest(
+        APIKEY,
+        proxyAgent
+    );
+    const translateAddUserResponse = buildTranslateAddUserResponse();
+    const addUser = buildAddUser(
+        APPID,
+        fetch,
+        createAddUserRequest,
+        translateAddUserResponse
+    );
+
     return Object.freeze(
         {
             addUserDevice,
@@ -75,7 +120,9 @@ module.exports  = function(APPID, APIKEY, proxyUrl){
             getAllUserDeviceByDevice,
             getAllUserDeviceByUser,
             getUserDeviceByDeviceAndUser,
-            editUserDeviceTitle
+            editUserDeviceTitle,
+            getUserByMobileNumber,
+            addUser
         }
     );
 }

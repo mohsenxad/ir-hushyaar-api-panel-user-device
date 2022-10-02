@@ -1,27 +1,27 @@
 {
-  "name": "ir-hushyaar-api-panel-user-device",
-  "version": "1.0.1",
-  "description": "User Device Micro Service For Panel API",
-  "main": "index.js",
-  "scripts": {
-    "serve": "nodemon index.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/mohsenxad/ir-hushyaar-api-panel-user-device.git"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/mohsenxad/ir-hushyaar-api-panel-user-device/issues"
-  },
-  "homepage": "https://github.com/mohsenxad/ir-hushyaar-api-panel-user-device#readme",
-  "dependencies": {
-    "ir-hushyaar-middleware-panel-auth": "1.0.11",
-    "ir-hushyaar-middleware-panel-authorization": "1.0.6",
-    "itty-router": "^2.6.5"
-  },
-  "port": 3001
+	"name": "ir-hushyaar-api-panel-user-device",
+	"version": "1.0.1",
+	"description": "User Device Micro Service For Panel API",
+	"main": "index.js",
+	"scripts": {
+		"serve": "nodemon index.js",
+		"test": "echo \"Error: no test specified\" && exit 1"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/mohsenxad/ir-hushyaar-api-panel-user-device.git"
+	},
+	"keywords": [],
+	"author": "",
+	"license": "ISC",
+	"bugs": {
+		"url": "https://github.com/mohsenxad/ir-hushyaar-api-panel-user-device/issues"
+	},
+	"homepage": "https://github.com/mohsenxad/ir-hushyaar-api-panel-user-device#readme",
+	"dependencies": {
+		"ir-hushyaar-middleware-panel-auth": "1.0.13",
+		"ir-hushyaar-middleware-panel-authorization": "1.0.6",
+		"itty-router": "^2.6.5"
+	},
+	"port": 3001
 }

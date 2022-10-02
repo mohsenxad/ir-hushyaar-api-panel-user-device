@@ -3,4 +3,5 @@ node_modules
 dist
 worker
 wrangler.toml
+dist
 dev.toml

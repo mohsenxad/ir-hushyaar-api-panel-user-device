@@ -6,12 +6,15 @@ module.exports =  function buildDeleteUserDevice(APPID,fetch,createDeleteUserDev
             userDeviceId
         );
 
-        let request = await fetch(
-            `https://data.mongodb-api.com/app/${APPID}/endpoint/data/v1/action/deleteOne`,
+        const url = `https://data.mongodb-api.com/app/${APPID}/endpoint/data/v1/action/deleteOne`;
+
+        const request = await fetch(
+            url,
             options
         );
 
-        let response = await request.json();
+        const response = await request.json();
+        console.log(response.deletedCount);
         return response;
     }
 }
