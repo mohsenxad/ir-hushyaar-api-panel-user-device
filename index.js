@@ -34,7 +34,6 @@ router.get("/", async (req, event) =>
 
 router.get('/userDevice/getAllByUser',auth.chechAuth,async (req, event) => 
     {
-            console.time();
             try {
                 const userId = req.user;
                 const userDeviceList = await userDeviceServices.getAllUserDeviceByUser(userId);
@@ -45,7 +44,6 @@ router.get('/userDevice/getAllByUser',auth.chechAuth,async (req, event) =>
                     },
                 }
                 var result = {deviceList: userDeviceList};
-                console.timeEnd();
                 return new Response(JSON.stringify(result, null, 2), init);
             } catch (error) {
                 console.log(error);
@@ -62,7 +60,6 @@ router.get('/userDevice/getAllByUser',auth.chechAuth,async (req, event) =>
 
 router.get('/userDevice/getByUserAndDevice',auth.chechAuth, authorization.checkUserDeviceAccess ,async (req, event) => 
     {
-        console.time();
         try {
             const userId = req.user;
             const deviceId = req.headers.get('deviceid');
@@ -74,7 +71,6 @@ router.get('/userDevice/getByUserAndDevice',auth.chechAuth, authorization.checkU
                 },
             }
             var result = {device: userDevice};
-            console.timeEnd();
             return new Response(JSON.stringify(result, null, 2), init);
         } catch (error) {
             console.log(error);
@@ -111,164 +107,147 @@ router.get('/userDevice/getByDevice',auth.chechAuth, authorization.checkUserDevi
     }
 )
 
+router.post('/userDevice/remove',
+    auth.chechAuth,
+    authorization.checkUserDeviceAccess,
+    async (req, event) =>
+        {
+            try
+                {
+                    const deviceId = req.headers.get('deviceid');
+					const body = await req.json();
+                    const userDeviceId = body.userDeviceId;
+                    const deleteResult = await userDeviceServices.deleteUserDevice(userDeviceId);
+                    const init = {
+                        headers: { 
+                            'content-type': 'application/json;charset=UTF-8',
+                            "Access-Control-Allow-Origin": "*"
+                        },
+                    }
+                    var result = {
+                        result: deleteResult
+                    };
+                    return new Response(JSON.stringify(result, null, 2), init);
+                } 
+            catch (error) 
+                {
+                    console.log(error);
+                    res.json(
+                        {
+                            error: error
+                        }
+                    )
+                }
+        }
+)
+
+router.post('/userDevice/add',
+	auth.chechAuth,
+	authorization.checkUserDeviceAccess,
+	async (req, event) =>
+		{
+			try
+				{
+					const deviceId = req.headers.get('deviceid');
+					const body = await req.json();
+					const userDeviceInfo = body;
+					const addResult = await userDeviceServices.addUserDevice(
+						req.user,
+						deviceId,
+						userDeviceInfo
+					);
+
+					const init = 
+						{
+							headers: { 
+								'content-type': 'application/json;charset=UTF-8',
+								"Access-Control-Allow-Origin": "*"
+							},
+						}
+					var result = 
+						{
+							result: addResult
+						};
+					return new Response(JSON.stringify(result, null, 2), init);
+				}
+			catch (error)
+				{
+					console.log(error);
+					res.json(
+						{
+							error: error
+						}
+					)
+				}
+		}
+)
+
 const corsHeaders = {
-    'Access-Control-Allow-Origin': '*',
-    'Access-Control-Allow-Methods': 'GET,POST,OPTIONS',
-    'Access-Control-Max-Age': '86400',
-    "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept, token, deviceid"
-  };
+	'Access-Control-Allow-Origin': '*',
+	'Access-Control-Allow-Methods': 'GET,POST,OPTIONS',
+	'Access-Control-Max-Age': '86400',
+	"Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept, token, deviceid"
+};
   
-function handleOptions(request) {
-    // Make sure the necessary headers are present
-    // for this to be a valid pre-flight request
-    let headers = request.headers;
-    if (
-      headers.get('Origin') !== null &&
-      headers.get('Access-Control-Request-Method') !== null &&
-      headers.get('Access-Control-Request-Headers') !== null
-    ) {
-      // Handle CORS pre-flight request.
-      // If you want to check or reject the requested method + headers
-      // you can do that here.
-      let respHeaders = {
-        ...corsHeaders,
-        // Allow all future content Request headers to go back to browser
-        // such as Authorization (Bearer) or X-Client-Name-Version
-        'Access-Control-Allow-Headers': request.headers.get('Access-Control-Request-Headers'),
-      };
-  
-      return new Response(null, {
-        headers: respHeaders,
-      });
-    } else {
-      // Handle standard OPTIONS request.
-      // If you want to allow other HTTP Methods, you can do that here.
-      return new Response(null, {
-        headers: {
-          Allow: 'GET, HEAD, POST, OPTIONS',
-        },
-      });
-    }
-  }
+function handleOptions(request)
+{
+	let headers = request.headers;
+	if (
+		headers.get('Origin') !== null &&
+		headers.get('Access-Control-Request-Method') !== null &&
+		headers.get('Access-Control-Request-Headers') !== null
+	)
+		{
+			let respHeaders = {
+				...corsHeaders,
+				// Allow all future content Request headers to go back to browser
+				// such as Authorization (Bearer) or X-Client-Name-Version
+				'Access-Control-Allow-Headers': request.headers.get('Access-Control-Request-Headers'),
+			};
 
-
-
-// {
-//     try {
-//         const deviceId = req.headers.deviceid;
-//         const userDeviceList = await userDeviceServices.getAllUserDeviceByDevice(deviceId);
-//         res.json(
-//             {
-//                 subscriberList: userDeviceList
-//             }
-//         );
-//     } catch (error) {
-//         console.log(error);
-//         res.json(
-//             {
-//                 error: error
-//             }
-//         )
-//     }
-    
-// }
-// )
-
-
-
-
-// app.get('/userDevice/getByDevice', auth.chechAuth, authorization.checkUserDeviceAccess, async (req, res) =>
-//     {
-//         try {
-//             const deviceId = req.headers.deviceid;
-//             const userDeviceList = await userDeviceServices.getAllUserDeviceByDevice(deviceId);
-//             res.json(
-//                 {
-//                     subscriberList: userDeviceList
-//                 }
-//             );
-//         } catch (error) {
-//             console.log(error);
-//             res.json(
-//                 {
-//                     error: error
-//                 }
-//             )
-//         }
-        
-//     }
-// )
-
-// app.post('/userDevice/remove', auth.chechAuth, authorization.checkUserDeviceAccess,async (req, res) =>
-//     {
-//         try {
-//             const deviceId = req.headers.deviceid;
-//             const userDeviceId = req.body.userDeviceId;
-//             const deleteResult = await userDeviceServices.deleteUserDevice(userDeviceId);
-//             res.json(
-//                 {
-//                     result: deleteResult
-//                 }
-//             );
-//         } catch (error) {
-//             console.log(error);
-//             res.json(
-//                 {
-//                     error: error
-//                 }
-//             )
-//         }
-//     }
-// )
-
-// app.post('/userDevice/add', auth.chechAuth, authorization.checkUserDeviceAccess,async (req, res) =>
-//     {
-//         try {
-//             const deviceId = req.headers.deviceid;
-//             const userDeviceInfo = req.body;
-//             console.log(userDeviceInfo);
-//             const addResult = await userDeviceServices.addUserDevice(
-//                 req.user,
-//                 deviceId,
-//                 userDeviceInfo
-//             );
-//             res.json(
-//                 {
-//                     result: addResult
-//                 }
-//             );
-//         } catch (error) {
-//             console.log(error);
-//             res.json(
-//                 {
-//                     error: error
-//                 }
-//             )
-//         }
-//     }
-// )
-
+			return new Response(null, 
+				{
+					headers: respHeaders,
+				}
+			);
+		}
+	else
+		{
+			return new Response(null,
+				{
+					headers: {
+						Allow: 'GET, HEAD, POST, OPTIONS',
+					},
+				}
+			);
+		}
+}
 
 
 router.all('*', () => new Response('Not Found.', { status: 404 }))
 
 
-// attach the router "handle" to the event handler
 addEventListener('fetch', event =>
-    {
-        
-        if(event.request.method === 'OPTIONS'){
-            event.respondWith(handleOptions(event.request));
-        }else{
-            const request = event.request
-            const url = event.request.url;
-            const modifiedRequest = new Request(url, {
-                body: request.body,
-                headers: request.headers,
-                method: request.method,
-                redirect: request.redirect
-            })
-            event.respondWith(router.handle(modifiedRequest, event))
-        }
-    }
+	{
+		
+		if(event.request.method === 'OPTIONS')
+			{
+				event.respondWith(handleOptions(event.request));
+			}
+		else
+			{
+				const request = event.request;
+				const body = request.body;
+				const url = event.request.url;
+				const modifiedRequest = new Request(url, 
+					{
+						body: request.body,
+						headers: request.headers,
+						method: request.method,
+						redirect: request.redirect
+					}
+				)
+				event.respondWith(router.handle(modifiedRequest, event))
+			}
+	}
 )
