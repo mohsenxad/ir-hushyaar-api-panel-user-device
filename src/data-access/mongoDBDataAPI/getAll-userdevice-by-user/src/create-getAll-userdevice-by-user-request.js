@@ -38,7 +38,7 @@ module.exports =  function buildCreateGetAllUserDeviceByUserRequest(apikey ,prox
                 $set: {
                     _id: "$deviceInfo._id",
                     token: "$deviceInfo.token",
-                    title: "$deviceInfo.title",
+                    //title: "$deviceInfo.title",
                     status: "$deviceInfo.status"
                 }
             },

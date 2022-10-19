@@ -1,7 +1,7 @@
 const auth = require('ir-hushyaar-middleware-panel-auth')(
-  MONGODB_DATAAPI_APPID,
-  MONGODB_DATAAPI_APIKEY,
-  PROXY_URL
+    MONGODB_DATAAPI_APPID,
+    MONGODB_DATAAPI_APIKEY,
+    PROXY_URL
 );
 
 const authorization = require('ir-hushyaar-middleware-panel-authorization')(
@@ -20,92 +20,94 @@ const authorization = require('ir-hushyaar-middleware-panel-authorization')(
 const packageJson = require('./package.json');
 const userDeviceServices = require('./src');
 
-
 import { Router } from 'itty-router'
 
 const router = new Router();
 
-router.get("/", async (req, event) => 
+router.get("/isAlive", async (req, event) => 
     {
-        return new Response(`👌 ${packageJson.name}:${packageJson.version}`)
+        const result = {
+            imoji: '👌',
+            name : packageJson.name,
+            version : packageJson.version
+        };
+        return createResponse(result);
     }
 );
 
 
-router.get('/userDevice/getAllByUser',auth.chechAuth,async (req, event) => 
+router.get('/userDevice/getAllByUser',
+    auth.chechAuth,
+    async (req, event) => 
+        {
+            try
+                {
+                    const userId = req.user;
+                    const userDeviceList = await userDeviceServices.getAllUserDeviceByUser(
+                        userId
+                    );
+                    var result = {
+                        deviceList: userDeviceList
+                    };
+                    return createResponse(result);
+                }
+            catch (error)
+                {
+                    return createErrorResponse(error);
+                }
+        }
+)
+
+
+router.get('/userDevice/getByUserAndDevice',
+    auth.chechAuth,
+    authorization.checkUserDeviceAccess,
+    async (req, event) => 
     {
-            try {
+        try
+            {
                 const userId = req.user;
-                const userDeviceList = await userDeviceServices.getAllUserDeviceByUser(userId);
-                const init = {
-                    headers: { 
-                        'content-type': 'application/json;charset=UTF-8',
-                        "Access-Control-Allow-Origin": "*"
-                    },
-                }
-                var result = {deviceList: userDeviceList};
-                return new Response(JSON.stringify(result, null, 2), init);
-            } catch (error) {
-                console.log(error);
-                return res
-                    .setHeader('Access-Control-Allow-Origin','*')
-                    .statusCode(400)
-                    .json({
-                        error: error
-                    });
+                const deviceId = req.headers.get('deviceid');
+                const userDevice = await userDeviceServices.getAllUserDeviceByDeviceAndUser(
+                    deviceId,
+                    userId
+                );
+                const result = {
+                    device: userDevice
+                };
+                return createResponse(result);
+            }
+        catch (error)
+            {
+                return createErrorResponse(error);
             }
     }
 )
 
 
-router.get('/userDevice/getByUserAndDevice',auth.chechAuth, authorization.checkUserDeviceAccess ,async (req, event) => 
-    {
-        try {
-            const userId = req.user;
-            const deviceId = req.headers.get('deviceid');
-            const userDevice = await userDeviceServices.getAllUserDeviceByDeviceAndUser(deviceId,userId);
-            const init = {
-                headers: { 
-                    'content-type': 'application/json;charset=UTF-8',
-                    "Access-Control-Allow-Origin": "*"
-                },
-            }
-            var result = {device: userDevice};
-            return new Response(JSON.stringify(result, null, 2), init);
-        } catch (error) {
-            console.log(error);
-            res.json(
+router.get('/userDevice/getByDevice',
+    auth.chechAuth,
+    authorization.checkUserDeviceAccess,
+    async (req, event) =>
+        {
+            try
                 {
-                    error: error
+                    const deviceId = req.headers.get('deviceid');
+                    const userDeviceList = await userDeviceServices.getAllUserDeviceByDevice(
+                        deviceId
+                    );
+                    const result = {
+                        subscriberList: userDeviceList
+                    };
+                    return createResponse(result);
                 }
-            )
+            catch (error)
+                {
+                    return createErrorResponse(error);
+                }
         }
-    }
 )
 
-router.get('/userDevice/getByDevice',auth.chechAuth, authorization.checkUserDeviceAccess ,async (req, event) =>
-    {
-        try {
-            const deviceId = req.headers.get('deviceid');
-            const userDeviceList = await userDeviceServices.getAllUserDeviceByDevice(deviceId);
-            const init = {
-                headers: { 
-                    'content-type': 'application/json;charset=UTF-8',
-                    "Access-Control-Allow-Origin": "*"
-                },
-            }
-            var result = {subscriberList: userDeviceList};
-            return new Response(JSON.stringify(result, null, 2), init);
-        } catch (error) {
-            console.log(error);
-            res.json(
-                {
-                    error: error
-                }
-            )
-        }
-    }
-)
 
 router.post('/userDevice/remove',
     auth.chechAuth,
@@ -118,28 +120,18 @@ router.post('/userDevice/remove',
 					const body = await req.json();
                     const userDeviceId = body.userDeviceId;
                     const deleteResult = await userDeviceServices.deleteUserDevice(userDeviceId);
-                    const init = {
-                        headers: { 
-                            'content-type': 'application/json;charset=UTF-8',
-                            "Access-Control-Allow-Origin": "*"
-                        },
-                    }
-                    var result = {
+                    const result = {
                         result: deleteResult
                     };
-                    return new Response(JSON.stringify(result, null, 2), init);
+                    return createResponse(result);
                 } 
             catch (error) 
                 {
-                    console.log(error);
-                    res.json(
-                        {
-                            error: error
-                        }
-                    )
+                    return createErrorResponse(error);
                 }
         }
 )
+
 
 router.post('/userDevice/add',
 	auth.chechAuth,
@@ -157,30 +149,106 @@ router.post('/userDevice/add',
 						userDeviceInfo
 					);
 
-					const init = 
-						{
-							headers: { 
-								'content-type': 'application/json;charset=UTF-8',
-								"Access-Control-Allow-Origin": "*"
-							},
-						}
-					var result = 
+					const result = 
 						{
 							result: addResult
 						};
-					return new Response(JSON.stringify(result, null, 2), init);
+                    return createResponse(result);
 				}
 			catch (error)
 				{
-					console.log(error);
-					res.json(
-						{
-							error: error
-						}
-					)
+					return createErrorResponse(error);
 				}
 		}
 )
+
+router.post('/device/setup',
+    auth.chechAuth,
+    async (req, res) =>
+        {
+            try 
+                {
+                    var userId = req.user;
+                    const body = await req.json();
+                    const manufactureId = body.manufactureId;
+        
+                    const addedUserDeviceId = await userDeviceServices.setup(
+                        userId,
+                        manufactureId
+                    );
+                    const result =
+                        {
+                            userDeviceId: addedUserDeviceId
+                        };
+        
+                    return createResponse(result);
+                }
+            catch(error)
+                {
+                    return createErrorResponse(error);
+                }
+        }
+)
+
+//check for authorization with userDeviceId
+router.post('/device/setInfo',
+    auth.chechAuth,
+    async (req, res) =>
+        {
+            try 
+                {
+
+                    const body = await req.json();
+                    const userdeviceId = body.userdeviceId;
+                    const title = body.title;
+        
+                    const updatedUserDeviceResule = await userDeviceServices.editUserDeviceTitle(
+                        userdeviceId,
+                        title
+                    );
+
+                    const result =
+                        {
+                            result: updatedUserDeviceResule
+                        };
+        
+                    return createResponse(result);
+                }
+            catch(error)
+                {
+                    return createErrorResponse(error);
+                }
+        }
+)
+
+function createErrorResponse(error){
+    console.log(error);
+
+    const jsonError = {
+        message: error.message 
+    }
+
+    const init = {
+        headers: { 
+            'content-type': 'application/json;charset=UTF-8',
+            "Access-Control-Allow-Origin": "*"
+        },
+        status: 400
+    }
+
+    return new Response(JSON.stringify(jsonError, null, 2), init);
+}
+
+function createResponse(jsonResult){
+    const init = {
+        headers: { 
+            'content-type': 'application/json;charset=UTF-8',
+            "Access-Control-Allow-Origin": "*"
+        },
+    }
+
+    return new Response(JSON.stringify(jsonResult, null, 2), init);
+}
 
 const corsHeaders = {
 	'Access-Control-Allow-Origin': '*',

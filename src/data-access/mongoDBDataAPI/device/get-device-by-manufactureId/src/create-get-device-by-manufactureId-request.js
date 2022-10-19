@@ -1,14 +1,16 @@
-module.exports = function buildCreateGetUserByMobileNumberRequest(
+module.exports = function buildCreateGetDeviceByManufactureIdRequest
+(
     apikey,
     proxyAgent
 )
     {
-        return function createGetUserByMobileNumberRequest(
-            mobileNumber
+        return function createGetDeviceByManufactureIdRequest
+        (
+            manufactureId
         )
             {
                 const query = {
-                    "mobileNumber": mobileNumber 
+                    "manufactureId": manufactureId 
                 };
 
                 const headers = {
@@ -18,7 +20,7 @@ module.exports = function buildCreateGetUserByMobileNumberRequest(
 
                 const body = JSON.stringify(
                     {
-                        collection:"users",
+                        collection:"devices",
                         database:"homeSecurity",
                         dataSource:"Cluster0",
                         filter: query
@@ -27,7 +29,7 @@ module.exports = function buildCreateGetUserByMobileNumberRequest(
         
                 var options= {
                     method:"POST",
-                    headers:headers,
+                    headers: headers,
                     body: body
                 };
         

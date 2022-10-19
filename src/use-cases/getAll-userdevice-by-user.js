@@ -1,11 +1,14 @@
-module.exports = function buildGetAllUserDeviceByUser(dataAccess){
-
-    return async function getAllUserDeviceByUser(
-        userId
-    ){
-        const response = await dataAccess.dataApi.getAllUserDeviceByUser(
+module.exports = function buildGetAllUserDeviceByUser
+(
+    dataAccess
+)
+    {
+        return async function getAllUserDeviceByUser(
             userId
-        )
-        return response;        
+        ){
+            const response = await dataAccess.dataApi.getAllUserDeviceByUser(
+                userId
+            )
+            return response;        
+        }
     }
-}

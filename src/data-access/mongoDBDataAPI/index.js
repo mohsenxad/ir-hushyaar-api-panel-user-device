@@ -112,6 +112,14 @@ module.exports  = function(APPID, APIKEY, proxyUrl){
         translateAddUserResponse
     );
 
+    const { getDeviceByManufactureId } = require('./device/get-device-by-manufactureId')
+    (
+        APPID,
+        APIKEY,
+        proxyAgent,
+        fetch
+    )
+
     return Object.freeze(
         {
             addUserDevice,
@@ -122,7 +130,8 @@ module.exports  = function(APPID, APIKEY, proxyUrl){
             getUserDeviceByDeviceAndUser,
             editUserDeviceTitle,
             getUserByMobileNumber,
-            addUser
+            addUser,
+            getDeviceByManufactureId
         }
     );
 }

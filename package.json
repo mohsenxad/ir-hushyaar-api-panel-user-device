@@ -1,6 +1,6 @@
 {
 	"name": "ir-hushyaar-api-panel-user-device",
-	"version": "1.0.2",
+	"version": "1.0.3",
 	"description": "User Device Micro Service For Panel API",
 	"main": "index.js",
 	"scripts": {
