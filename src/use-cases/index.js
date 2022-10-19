@@ -4,7 +4,8 @@ const buildDeleteUserDevice = require('./delete-userdevice');
 const buildGetAllUserDeviceByDevice = require('./getAll-userdevice-by-device');
 const buildGetAllUserDeviceByUser = require('./getAll-userdevice-by-user');
 const buildGetAllUserDeviceByDeviceAndUser = require('./get-userdevice-by-device-and-user');
-const buildEditUserDeviceTitle = require('./edit-userdevice-title')
+const buildEditUserDeviceTitle = require('./edit-userdevice-title');
+const buildSetup = require('./setup');
 
 
 
@@ -28,6 +29,7 @@ module.exports = function(
     const getAllUserDeviceByUser = buildGetAllUserDeviceByUser(dataAccess);
     const getAllUserDeviceByDeviceAndUser = buildGetAllUserDeviceByDeviceAndUser(dataAccess);
     const editUserDeviceTitle = buildEditUserDeviceTitle(dataAccess);
+    const setup = buildSetup(dataAccess);
 
     return Object.freeze(
         {
@@ -37,7 +39,8 @@ module.exports = function(
             getAllUserDeviceByDevice,
             getAllUserDeviceByUser,
             getAllUserDeviceByDeviceAndUser,
-            editUserDeviceTitle
+            editUserDeviceTitle,
+            setup
         }
     );
 }

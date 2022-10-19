@@ -42,14 +42,17 @@ module.exports = function buildAddUserDevice(dataAccess){
                 userId
             );
     
-            if(foundDevice){
-                userDeviceInfo.title = foundDevice.title;
-                const userDevice = userDeviceServices.makeUserDevice(userDeviceInfo);
-                const response = await dataAccess.dataApi.addUserDevice(userDevice);
-                return response;
-            }else{
-                throw new Error('No Device Found');
-            }
+            if(foundDevice)
+                {
+                    userDeviceInfo.title = foundDevice.title;
+                    const userDevice = userDeviceServices.makeUserDevice(userDeviceInfo);
+                    const response = await dataAccess.dataApi.addUserDevice(userDevice);
+                    return response;
+                }
+            else
+                {
+                    throw new Error('No Device Found');
+                }
         } catch (error) {
             throw error;
         }
