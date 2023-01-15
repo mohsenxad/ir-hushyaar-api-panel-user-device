@@ -14,33 +14,34 @@ module.exports = function(
     MONGODB_DATAAPI_APPID,
     MONGODB_DATAAPI_APIKEY,
     proxyUrl
-    ){
+)
+    {
 
-    const dataAccess = require('../data-access')(
-        MONGODB_DATAAPI_APPID,
-        MONGODB_DATAAPI_APIKEY,
-        proxyUrl
-    )
+        const dataAccess = require('../data-access')(
+            MONGODB_DATAAPI_APPID,
+            MONGODB_DATAAPI_APIKEY,
+            proxyUrl
+        )
 
-    const addUserDevice = buildAddUserDevice(dataAccess);
-    const editUserDevicePermission = buildEditUserDevicePermission(dataAccess);
-    const deleteUserDevice = buildDeleteUserDevice(dataAccess);
-    const getAllUserDeviceByDevice = buildGetAllUserDeviceByDevice(dataAccess);
-    const getAllUserDeviceByUser = buildGetAllUserDeviceByUser(dataAccess);
-    const getAllUserDeviceByDeviceAndUser = buildGetAllUserDeviceByDeviceAndUser(dataAccess);
-    const editUserDeviceTitle = buildEditUserDeviceTitle(dataAccess);
-    const setup = buildSetup(dataAccess);
+        const addUserDevice = buildAddUserDevice(dataAccess);
+        const editUserDevicePermission = buildEditUserDevicePermission(dataAccess);
+        const deleteUserDevice = buildDeleteUserDevice(dataAccess);
+        const getAllUserDeviceByDevice = buildGetAllUserDeviceByDevice(dataAccess);
+        const getAllUserDeviceByUser = buildGetAllUserDeviceByUser(dataAccess);
+        const getAllUserDeviceByDeviceAndUser = buildGetAllUserDeviceByDeviceAndUser(dataAccess);
+        const editUserDeviceTitle = buildEditUserDeviceTitle(dataAccess);
+        const setup = buildSetup(dataAccess);
 
-    return Object.freeze(
-        {
-            addUserDevice,
-            editUserDevicePermission,
-            deleteUserDevice,
-            getAllUserDeviceByDevice,
-            getAllUserDeviceByUser,
-            getAllUserDeviceByDeviceAndUser,
-            editUserDeviceTitle,
-            setup
-        }
-    );
-}
+        return Object.freeze(
+            {
+                addUserDevice,
+                editUserDevicePermission,
+                deleteUserDevice,
+                getAllUserDeviceByDevice,
+                getAllUserDeviceByUser,
+                getAllUserDeviceByDeviceAndUser,
+                editUserDeviceTitle,
+                setup
+            }
+        );
+    }

@@ -1,0 +1,6 @@
+version: "3.6"
+services:
+  ir-hushyaar-api-panel-user-device:
+    build: ./
+    ports:
+      - 3001:3001

@@ -36,108 +36,114 @@ const buildAddUser = require('./add-user/src/add-user');
 
 
 
-module.exports  = function(APPID, APIKEY, proxyUrl){
+module.exports  = function
+(
+    APPID,
+    APIKEY,
+    proxyUrl
+)
+    {
 
-    if(!APPID){
-        throw new Error("MongoDB Data Api must have an APPID");
-    }
+        if(!APPID){
+            throw new Error("MongoDB Data Api must have an APPID");
+        }
 
-    if(!APIKEY){
-        throw new Error("MongoDB Data Api must have an APIKEY");
-    }
+        if(!APIKEY){
+            throw new Error("MongoDB Data Api must have an APIKEY");
+        }
 
-    let proxyAgent = undefined;
-    if(proxyUrl){
-        proxyAgent = new HttpsProxyAgent(proxyUrl);
-    }
+        let proxyAgent = undefined;
+        if(proxyUrl){
+            proxyAgent = new HttpsProxyAgent(proxyUrl);
+        }
 
-    const createAddUserDeviceRequest = buildCreateAddUserDeviceRequest(
-        APIKEY,
-        proxyAgent
-    );
-    const translateAddUserDeviceResponse = buildTranslateAddUserDeviceResponse();
-    const addUserDevice = buildAddUserDevice(
-        APPID,
-        fetch,
-        createAddUserDeviceRequest,
-        translateAddUserDeviceResponse
-    );
-
-    const createEditUserDevicePermissionRequest = buildCreateEditUserDevicePermissionRequest(APIKEY, proxyAgent);
-    const editUserDevicePermission = buildEditUserDevicePermission(APPID,fetch, createEditUserDevicePermissionRequest);
-
-    const createDeleteUserDeviceRequest = buildCreateDeleteUserDeviceRequest(APIKEY, proxyAgent);
-    const deleteUserDevice = buildDeleteUserDevice(APPID,fetch, createDeleteUserDeviceRequest);
-
-    const createGetAllUserDeviceByDeviceRequest = buildCreateGetAllUserDeviceByDeviceRequest(APIKEY, proxyAgent);
-    const translateGetAllUserDeviceByDeviceResponse = buildTranslateGetAllUserDeviceByDeviceResponse();
-    const getAllUserDeviceByDevice = buildGetAllUserDeviceByDevice(
-        APPID,
-        fetch,
-        createGetAllUserDeviceByDeviceRequest,
-        translateGetAllUserDeviceByDeviceResponse)
-
-    const createGetAllUserDeviceByUserRequest = buildCreateGetAllUserDeviceByUserRequest(APIKEY, proxyAgent);
-    const translateGetAllUserDeviceByUserResponse = buildTranslateGetAllUserDeviceByUserResponse();
-    const getAllUserDeviceByUser = buildGetAllUserDeviceByUser(APPID,fetch,createGetAllUserDeviceByUserRequest,translateGetAllUserDeviceByUserResponse)
-
-    const createGetUserDeviceByDeviceAndUserRequest = buildCreateGetUserDeviceByDeviceAndUserRequest(APIKEY, proxyAgent);
-    const translateGetUserDeviceByDeviceAndUserResponse = buildTranslateGetUserDeviceByDeviceAndUserResponse();
-    const getUserDeviceByDeviceAndUser = buildGetUserDeviceByDeviceAndUser(
-        APPID,
-        fetch,
-        createGetUserDeviceByDeviceAndUserRequest,
-        translateGetUserDeviceByDeviceAndUserResponse
+        const createAddUserDeviceRequest = buildCreateAddUserDeviceRequest(
+            APIKEY,
+            proxyAgent
+        );
+        const translateAddUserDeviceResponse = buildTranslateAddUserDeviceResponse();
+        const addUserDevice = buildAddUserDevice(
+            APPID,
+            fetch,
+            createAddUserDeviceRequest,
+            translateAddUserDeviceResponse
         );
 
-    const createEditUserDeviceTitleRequest = buildCreateEditUserDeviceTitleRequest(APIKEY, proxyAgent);
-    const editUserDeviceTitle = buildEditUserDeviceTitle(APPID,fetch, createEditUserDeviceTitleRequest);
+        const createEditUserDevicePermissionRequest = buildCreateEditUserDevicePermissionRequest(APIKEY, proxyAgent);
+        const editUserDevicePermission = buildEditUserDevicePermission(APPID,fetch, createEditUserDevicePermissionRequest);
+
+        const createDeleteUserDeviceRequest = buildCreateDeleteUserDeviceRequest(APIKEY, proxyAgent);
+        const deleteUserDevice = buildDeleteUserDevice(APPID,fetch, createDeleteUserDeviceRequest);
+
+        const createGetAllUserDeviceByDeviceRequest = buildCreateGetAllUserDeviceByDeviceRequest(APIKEY, proxyAgent);
+        const translateGetAllUserDeviceByDeviceResponse = buildTranslateGetAllUserDeviceByDeviceResponse();
+        const getAllUserDeviceByDevice = buildGetAllUserDeviceByDevice(
+            APPID,
+            fetch,
+            createGetAllUserDeviceByDeviceRequest,
+            translateGetAllUserDeviceByDeviceResponse)
+
+        const createGetAllUserDeviceByUserRequest = buildCreateGetAllUserDeviceByUserRequest(APIKEY, proxyAgent);
+        const translateGetAllUserDeviceByUserResponse = buildTranslateGetAllUserDeviceByUserResponse();
+        const getAllUserDeviceByUser = buildGetAllUserDeviceByUser(APPID,fetch,createGetAllUserDeviceByUserRequest,translateGetAllUserDeviceByUserResponse)
+
+        const createGetUserDeviceByDeviceAndUserRequest = buildCreateGetUserDeviceByDeviceAndUserRequest(APIKEY, proxyAgent);
+        const translateGetUserDeviceByDeviceAndUserResponse = buildTranslateGetUserDeviceByDeviceAndUserResponse();
+        const getUserDeviceByDeviceAndUser = buildGetUserDeviceByDeviceAndUser(
+            APPID,
+            fetch,
+            createGetUserDeviceByDeviceAndUserRequest,
+            translateGetUserDeviceByDeviceAndUserResponse
+            );
+
+        const createEditUserDeviceTitleRequest = buildCreateEditUserDeviceTitleRequest(APIKEY, proxyAgent);
+        const editUserDeviceTitle = buildEditUserDeviceTitle(APPID,fetch, createEditUserDeviceTitleRequest);
 
 
-    const createGetUserByMobileNumberRequest = buildCreateGetUserByMobileNumberRequest(
-        APIKEY,
-        proxyAgent
-    );
-    const translateGetUserByMobileNumberResponse = buildTranslateGetUserByMobileNumberResponse();
-    const getUserByMobileNumber = buildGetUserByMobileNumber(
-        APPID,
-        fetch,
-        createGetUserByMobileNumberRequest,
-        translateGetUserByMobileNumberResponse
-    );
+        const createGetUserByMobileNumberRequest = buildCreateGetUserByMobileNumberRequest(
+            APIKEY,
+            proxyAgent
+        );
+        const translateGetUserByMobileNumberResponse = buildTranslateGetUserByMobileNumberResponse();
+        const getUserByMobileNumber = buildGetUserByMobileNumber(
+            APPID,
+            fetch,
+            createGetUserByMobileNumberRequest,
+            translateGetUserByMobileNumberResponse
+        );
 
-    const createAddUserRequest = buildCreateAddUserRequest(
-        APIKEY,
-        proxyAgent
-    );
-    const translateAddUserResponse = buildTranslateAddUserResponse();
-    const addUser = buildAddUser(
-        APPID,
-        fetch,
-        createAddUserRequest,
-        translateAddUserResponse
-    );
+        const createAddUserRequest = buildCreateAddUserRequest(
+            APIKEY,
+            proxyAgent
+        );
+        const translateAddUserResponse = buildTranslateAddUserResponse();
+        const addUser = buildAddUser(
+            APPID,
+            fetch,
+            createAddUserRequest,
+            translateAddUserResponse
+        );
 
-    const { getDeviceByManufactureId } = require('./device/get-device-by-manufactureId')
-    (
-        APPID,
-        APIKEY,
-        proxyAgent,
-        fetch
-    )
+        const { getDeviceByManufactureId } = require('./device/get-device-by-manufactureId')
+        (
+            APPID,
+            APIKEY,
+            proxyAgent,
+            fetch
+        )
 
-    return Object.freeze(
-        {
-            addUserDevice,
-            editUserDevicePermission,
-            deleteUserDevice,
-            getAllUserDeviceByDevice,
-            getAllUserDeviceByUser,
-            getUserDeviceByDeviceAndUser,
-            editUserDeviceTitle,
-            getUserByMobileNumber,
-            addUser,
-            getDeviceByManufactureId
-        }
-    );
-}
+        return Object.freeze(
+            {
+                addUserDevice,
+                editUserDevicePermission,
+                deleteUserDevice,
+                getAllUserDeviceByDevice,
+                getAllUserDeviceByUser,
+                getUserDeviceByDeviceAndUser,
+                editUserDeviceTitle,
+                getUserByMobileNumber,
+                addUser,
+                getDeviceByManufactureId
+            }
+        );
+    }
