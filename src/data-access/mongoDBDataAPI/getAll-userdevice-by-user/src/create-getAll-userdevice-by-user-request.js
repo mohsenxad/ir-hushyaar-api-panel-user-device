@@ -6,10 +6,10 @@ module.exports =  function buildCreateGetAllUserDeviceByUserRequest(apikey ,prox
         const pipeline = [
             {
                 "$match": {
-                    "user": 
-                        { 
+                    "user":
+                        {
                             "$oid": userId
-                        } 
+                        }
                 },
             },
             {
@@ -26,7 +26,7 @@ module.exports =  function buildCreateGetAllUserDeviceByUserRequest(apikey ,prox
             {
                 "$lookup" : {
                     from: "users",
-                    localField : "user",
+                    localField : "deviceInfo.user",
                     foreignField: "_id",
                     as: "userInfo"
                 }
@@ -38,7 +38,7 @@ module.exports =  function buildCreateGetAllUserDeviceByUserRequest(apikey ,prox
                 $set: {
                     _id: "$deviceInfo._id",
                     token: "$deviceInfo.token",
-                    title: "$deviceInfo.title",
+                    //title: "$deviceInfo.title",
                     status: "$deviceInfo.status"
                 }
             },
@@ -47,8 +47,8 @@ module.exports =  function buildCreateGetAllUserDeviceByUserRequest(apikey ,prox
                     remaningDays: "$userInfo.remaningDays"
                 }
             }
-            
-                
+
+
         ];
 
         var options= {
@@ -64,7 +64,7 @@ module.exports =  function buildCreateGetAllUserDeviceByUserRequest(apikey ,prox
                     database:"homeSecurity",
                     dataSource:"Cluster0",
                     pipeline: pipeline
-                    
+
                 }
             )
         };

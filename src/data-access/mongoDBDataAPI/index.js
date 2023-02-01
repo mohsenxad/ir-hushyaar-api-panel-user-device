@@ -81,7 +81,8 @@ module.exports  = function
             APPID,
             fetch,
             createGetAllUserDeviceByDeviceRequest,
-            translateGetAllUserDeviceByDeviceResponse)
+            translateGetAllUserDeviceByDeviceResponse
+        );
 
         const createGetAllUserDeviceByUserRequest = buildCreateGetAllUserDeviceByUserRequest(APIKEY, proxyAgent);
         const translateGetAllUserDeviceByUserResponse = buildTranslateGetAllUserDeviceByUserResponse();
@@ -94,7 +95,7 @@ module.exports  = function
             fetch,
             createGetUserDeviceByDeviceAndUserRequest,
             translateGetUserDeviceByDeviceAndUserResponse
-            );
+        );
 
         const createEditUserDeviceTitleRequest = buildCreateEditUserDeviceTitleRequest(APIKEY, proxyAgent);
         const editUserDeviceTitle = buildEditUserDeviceTitle(APPID,fetch, createEditUserDeviceTitleRequest);

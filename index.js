@@ -2,11 +2,26 @@ const express = require('express');
 var bodyParser = require('body-parser')
 require('dotenv').config();
 
+
+const packageJson = require('./package.json');
+
 const auth = require('ir-hushyaar-middleware-panel-auth')(
     process.env.MONGODB_DATAAPI_APPID,
     process.env.MONGODB_DATAAPI_APIKEY,
     process.env.PROXY_URL
 );
+
+var app = express();
+app.use(bodyParser.json())
+
+app.use(function(req, res, next) 
+    {
+        res.header("Access-Control-Allow-Origin", "*");
+        res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, token, deviceid");
+        next();
+    }
+);
+
 
 const authorization = require('ir-hushyaar-middleware-panel-authorization')(
     process.env.MONGODB_DATAAPI_APPID,
@@ -15,30 +30,25 @@ const authorization = require('ir-hushyaar-middleware-panel-authorization')(
     process.env.REDIS_URL
 )
 
-const packageJson = require('./package.json');
+const userDeviceServices = require('./src');
 
-var app = express();
-app.use(bodyParser.json())
 
-app.use(function(req, res, next)
+app.get("/isAlive", async (req, res) => 
     {
-        res.header("Access-Control-Allow-Origin", "*");
-        res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, token, deviceid");
-        next();
+        console.log('isAlive')
+        const result = {
+            imoji: '👌',
+            name : packageJson.name,
+            version : packageJson.version
+        };
+        return sendResult(res,result);
     }
 );
 
-const userDeviceServices = require('./src');
-
-app.get('/', (req, res) => 
-    {
-        res.send(`👌 ${packageJson.name}:${packageJson.version}`);
-    }
-)
 
 app.get('/userDevice/getAllByUser',
     auth.chechAuth,
-    async (req, res)=>
+    async (req, res) => 
         {
             try
                 {
@@ -46,45 +56,44 @@ app.get('/userDevice/getAllByUser',
                     const userDeviceList = await userDeviceServices.getAllUserDeviceByUser(
                         userId
                     );
-                    const result = {
-                            deviceList: userDeviceList
-                    }
-                    sendResult(res, result);
+                    var result = {
+                        deviceList: userDeviceList
+                    };
+                    return sendResult(res,result);
                 }
             catch (error)
                 {
-                    processError(res, error);
+                    return processError(res,error);
                 }
-            
         }
 )
+
 
 app.get('/userDevice/getByUserAndDevice',
     auth.chechAuth,
     authorization.checkUserDeviceAccess,
-    async (req, res) =>
-        {
-            try
-                {
-                    const userId = req.user;
-                    const deviceId = req.headers.deviceid;
-                    const userDevice = await userDeviceServices.getAllUserDeviceByDeviceAndUser(
-                        deviceId,
-                        userId
-                    );
-                    const result = {
-                            device: userDevice
-                    };
-                    
-                    sendResult(res, result);
-                }
-            catch (error)
-                {
-                    processError(res, error);
-                }
-            
-        }
+    async (req, res) => 
+    {
+        try
+            {
+                const userId = req.user;
+                const deviceId = req.headers['deviceid'];
+                const userDevice = await userDeviceServices.getAllUserDeviceByDeviceAndUser(
+                    deviceId,
+                    userId
+                );
+                const result = {
+                    device: userDevice
+                };
+                return sendResult(res,result);
+            }
+        catch (error)
+            {
+                return processError(res,error);
+            }
+    }
 )
+
 
 app.get('/userDevice/getByDevice',
     auth.chechAuth,
@@ -93,23 +102,22 @@ app.get('/userDevice/getByDevice',
         {
             try
                 {
-                    const deviceId = req.headers.deviceid;
+                    const deviceId = req.headers['deviceid'];
                     const userDeviceList = await userDeviceServices.getAllUserDeviceByDevice(
                         deviceId
                     );
-
                     const result = {
                         subscriberList: userDeviceList
                     };
-                    sendResult(res, result);
+                    return sendResult(res,result);
                 }
-            catch (error) 
+            catch (error)
                 {
-                    processError(res, error);
+                    return processError(res,error);
                 }
-            
         }
 )
+
 
 app.post('/userDevice/remove',
     auth.chechAuth,
@@ -118,48 +126,50 @@ app.post('/userDevice/remove',
         {
             try
                 {
-                    const deviceId = req.headers.deviceid;
-                    const userDeviceId = req.body.userDeviceId;
+                    const deviceId = req.headers['deviceid'];
+					const body = await req.json();
+                    const userDeviceId = body.userDeviceId;
                     const deleteResult = await userDeviceServices.deleteUserDevice(userDeviceId);
                     const result = {
                         result: deleteResult
                     };
-                    sendResult(res, result);
-                }
+                    return sendResult(res,result);
+                } 
             catch (error) 
                 {
-                    processError(res, error);
+                    return processError(res,error);
                 }
         }
 )
 
+
 app.post('/userDevice/add',
-    auth.chechAuth,
-    authorization.checkUserDeviceAccess,
-    async (req, res) =>
-        {
-            try
-                {
-                    const deviceId = req.headers.deviceid;
-                    const userDeviceInfo = req.body;
-                    
-                    const addResult = await userDeviceServices.addUserDevice(
-                        req.user,
-                        deviceId,
-                        userDeviceInfo
-                    );
+	auth.chechAuth,
+	authorization.checkUserDeviceAccess,
+	async (req, res) =>
+		{
+			try
+				{
+					const deviceId = req.headers['deviceid'];
+					const body = await req.json();
+					const userDeviceInfo = body;
+					const addResult = await userDeviceServices.addUserDevice(
+						req.user,
+						deviceId,
+						userDeviceInfo
+					);
 
-                    const result = {
-                        result: addResult
-                    };
-
-                    sendResult(res, result);
-                }
-            catch (error)
-                {
-                    processError(res, error);
-                }
-        }
+					const result = 
+						{
+							result: addResult
+						};
+                    return sendResult(res,result);
+				}
+			catch (error)
+				{
+					return processError(res,error);
+				}
+		}
 )
 
 app.post('/device/setup',
@@ -169,7 +179,8 @@ app.post('/device/setup',
             try 
                 {
                     var userId = req.user;
-                    var manufactureId = req.body.manufactureId;
+                    const body = await req.json();
+                    const manufactureId = body.manufactureId;
         
                     const addedUserDeviceId = await userDeviceServices.setup(
                         userId,
@@ -179,13 +190,12 @@ app.post('/device/setup',
                         {
                             userDeviceId: addedUserDeviceId
                         };
-                    
         
-                    sendResult(res, result)
+                    return sendResult(res,result);
                 }
             catch(error)
                 {
-                    processError(res, error);
+                    return processError(res,error);
                 }
         }
 )
@@ -198,7 +208,7 @@ app.post('/device/setInfo',
             try 
                 {
 
-                    const body = req.body;
+                    const body = await req.json();
                     const userdeviceId = body.userdeviceId;
                     const title = body.title;
         
@@ -211,13 +221,12 @@ app.post('/device/setInfo',
                         {
                             result: updatedUserDeviceResule
                         };
-                    
         
-                    sendResult(res, result)
+                    return sendResult(res,result);
                 }
             catch(error)
                 {
-                    processError(res, error);
+                    return processError(res,error);
                 }
         }
 )
@@ -231,8 +240,7 @@ function sendResult
         res.json(data);
     }
 
-function processError
-(
+function processError(
     res,
     error
 )
@@ -244,7 +252,6 @@ function processError
             }
         );
     }
-
 
 app.listen(packageJson.port,function()
     {

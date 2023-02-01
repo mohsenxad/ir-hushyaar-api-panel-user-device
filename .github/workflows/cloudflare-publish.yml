@@ -1,0 +1,32 @@
+name: CloudFlare Worker Publish
+
+on:
+  push:
+    branches:
+      - worker
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    name: Deploy
+    steps:
+      - uses: actions/checkout@v3
+      - name: Install dependencies
+        run: npm install
+      - name: Publish app
+        uses: cloudflare/wrangler-action@2.0.0
+        with:
+          apiToken: ${{ secrets.CF_API_TOKEN }}
+          accountId: ${{ secrets.CF_ACCOUNT_ID }}
+          secrets: |
+            MONGODB_DATAAPI_APPID
+            MONGODB_DATAAPI_APIKEY
+            PROXY_URL
+            UPSTASH_REDIS_REST_TOKEN
+            UPSTASH_REDIS_REST_URL
+        env:
+          MONGODB_DATAAPI_APPID : ${{ secrets.MONGODB_DATAAPI_APPID }}
+          MONGODB_DATAAPI_APIKEY: ${{ secrets.MONGODB_DATAAPI_APIKEY }}
+          PROXY_URL: ${{ secrets.PROXY_URL }}
+          UPSTASH_REDIS_REST_TOKEN: ${{ secrets.UPSTASH_REDIS_REST_TOKEN }}
+          UPSTASH_REDIS_REST_URL: ${{ secrets.UPSTASH_REDIS_REST_URL }}
