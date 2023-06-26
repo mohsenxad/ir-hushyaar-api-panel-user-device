@@ -1,11 +1,18 @@
-module.exports = function buildDeleteUserDevice(dataAccess){
+module.exports = function buildDeleteUserDevice
+(
+    dataAccess
+)
+    {
 
-    return async function deleteUserDevice(
-        userDeviceId
-    ){
-        const response = await dataAccess.dataApi.deleteUserDevice(
+        return async function deleteUserDevice
+        (
             userDeviceId
         )
-        return response;        
+            {
+                const response = await dataAccess.dataApi.deleteUserDevice(
+                    userDeviceId
+                );
+                
+                return response;        
+            }
     }
-}

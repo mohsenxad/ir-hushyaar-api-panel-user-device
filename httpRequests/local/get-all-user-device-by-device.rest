@@ -1,0 +1,5 @@
+curl 
+--request GET
+--url http://localhost:3001/userDevice/getByDevice
+--header 'token:6017dfc63eaae1044107172f'
+--header 'deviceid:626a5b41dfbde8d0228ea8b3'

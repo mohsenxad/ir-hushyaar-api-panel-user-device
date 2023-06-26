@@ -1,17 +1,46 @@
 const express = require('express');
 var bodyParser = require('body-parser')
+const Sentry = require('@sentry/node');
+const Tracing = require("@sentry/tracing");
 require('dotenv').config();
 
 
 const packageJson = require('./package.json');
 
 const auth = require('ir-hushyaar-middleware-panel-auth')(
-    process.env.MONGODB_DATAAPI_APPID,
-    process.env.MONGODB_DATAAPI_APIKEY,
-    process.env.PROXY_URL
+    {
+        MONGODB_URI: process.env.MONGODB_URI,
+        DATABASE_NAME: process.env.DATABASE_NAME
+    }
 );
 
 var app = express();
+
+Sentry.init(
+    {
+        dsn: process.env.SENTRY_DSN,
+        integrations: [
+        // enable HTTP calls tracing
+        new Sentry.Integrations.Http({ tracing: true }),
+        // enable Express.js middleware tracing
+        new Tracing.Integrations.Express({ app }),
+        ],
+    
+        // Set tracesSampleRate to 1.0 to capture 100%
+        // of transactions for performance monitoring.
+        // We recommend adjusting this value in production
+        tracesSampleRate: 1.0,
+    }
+);
+
+// RequestHandler creates a separate execution context using domains, so that every
+// transaction/span/breadcrumb is attached to its own Hub instance
+app.use(Sentry.Handlers.requestHandler());
+// TracingHandler creates a trace for every incoming request
+app.use(Sentry.Handlers.tracingHandler());
+
+app.use(Sentry.Handlers.errorHandler());
+
 app.use(bodyParser.json())
 
 app.use(function(req, res, next) 
@@ -24,10 +53,12 @@ app.use(function(req, res, next)
 
 
 const authorization = require('ir-hushyaar-middleware-panel-authorization')(
-    process.env.MONGODB_DATAAPI_APPID,
-    process.env.MONGODB_DATAAPI_APIKEY,
-    process.env.PROXY_URL,
-    process.env.REDIS_URL
+    process.env.REDIS_URL,
+    {
+        DATABASE_NAME: process.env.DATABASE_NAME,
+        MONGODB_URI: process.env.MONGODB_URI
+    }
+    
 )
 
 const userDeviceServices = require('./src');
@@ -35,13 +66,16 @@ const userDeviceServices = require('./src');
 
 app.get("/isAlive", async (req, res) => 
     {
-        console.log('isAlive')
         const result = {
             imoji: '👌',
             name : packageJson.name,
             version : packageJson.version
         };
-        return sendResult(res,result);
+
+        return sendResult(
+            res,
+            result
+        );
     }
 );
 
@@ -53,20 +87,29 @@ app.get('/userDevice/getAllByUser',
             try
                 {
                     const userId = req.user;
+
                     const userDeviceList = await userDeviceServices.getAllUserDeviceByUser(
                         userId
                     );
+
                     var result = {
                         deviceList: userDeviceList
                     };
-                    return sendResult(res,result);
+
+                    return sendResult(
+                        res,
+                        result
+                    );
                 }
             catch (error)
                 {
-                    return processError(res,error);
+                    return processError(
+                        res,
+                        error
+                    );
                 }
         }
-)
+);
 
 
 app.get('/userDevice/getByUserAndDevice',
@@ -77,22 +120,31 @@ app.get('/userDevice/getByUserAndDevice',
         try
             {
                 const userId = req.user;
-                const deviceId = req.headers['deviceid'];
-                const userDevice = await userDeviceServices.getAllUserDeviceByDeviceAndUser(
+                const deviceId = req.headers.deviceid;
+
+                const userDevice = await userDeviceServices.getUserdeviceByDeviceAndUser(
                     deviceId,
                     userId
                 );
+
                 const result = {
                     device: userDevice
                 };
-                return sendResult(res,result);
+
+                return sendResult(
+                    res,
+                    result
+                );
             }
         catch (error)
             {
-                return processError(res,error);
+                return processError(
+                    res,
+                    error
+                );
             }
     }
-)
+);
 
 
 app.get('/userDevice/getByDevice',
@@ -102,21 +154,30 @@ app.get('/userDevice/getByDevice',
         {
             try
                 {
-                    const deviceId = req.headers['deviceid'];
+                    const deviceId = req.headers.deviceid;
+
                     const userDeviceList = await userDeviceServices.getAllUserDeviceByDevice(
                         deviceId
                     );
+
                     const result = {
                         subscriberList: userDeviceList
                     };
-                    return sendResult(res,result);
+
+                    return sendResult(
+                        res,
+                        result
+                    );
                 }
             catch (error)
                 {
-                    return processError(res,error);
+                    return processError(
+                        res,
+                        error
+                    );
                 }
         }
-)
+);
 
 
 app.post('/userDevice/remove',
@@ -126,21 +187,31 @@ app.post('/userDevice/remove',
         {
             try
                 {
-                    const deviceId = req.headers['deviceid'];
-					const body = await req.json();
-                    const userDeviceId = body.userDeviceId;
-                    const deleteResult = await userDeviceServices.deleteUserDevice(userDeviceId);
+                    const deviceId = req.headers.deviceid;
+                    const userDeviceId = req.body.userDeviceId;
+
+                    const deleteResult = await userDeviceServices.deleteUserDevice(
+                        userDeviceId
+                    );
+
                     const result = {
                         result: deleteResult
                     };
-                    return sendResult(res,result);
+
+                    return sendResult(
+                        res,
+                        result
+                    );
                 } 
             catch (error) 
                 {
-                    return processError(res,error);
+                    return processError(
+                        res,
+                        error
+                    );
                 }
         }
-)
+);
 
 
 app.post('/userDevice/add',
@@ -150,9 +221,9 @@ app.post('/userDevice/add',
 		{
 			try
 				{
-					const deviceId = req.headers['deviceid'];
-					const body = await req.json();
-					const userDeviceInfo = body;
+					const deviceId = req.headers.deviceid;
+					const userDeviceInfo = req.body;
+
 					const addResult = await userDeviceServices.addUserDevice(
 						req.user,
 						deviceId,
@@ -163,14 +234,21 @@ app.post('/userDevice/add',
 						{
 							result: addResult
 						};
-                    return sendResult(res,result);
+                    
+                    return sendResult(
+                        res,
+                        result
+                    );
 				}
 			catch (error)
 				{
-					return processError(res,error);
+					return processError(
+                        res,
+                        error
+                    );
 				}
 		}
-)
+);
 
 app.post('/device/setup',
     auth.chechAuth,
@@ -178,27 +256,33 @@ app.post('/device/setup',
         {
             try 
                 {
-                    var userId = req.user;
-                    const body = await req.json();
-                    const manufactureId = body.manufactureId;
+                    const userId = req.user;
+                    const manufactureId = req.body.manufactureId;
         
                     const addedUserDeviceId = await userDeviceServices.setup(
                         userId,
                         manufactureId
                     );
+
                     const result =
                         {
                             userDeviceId: addedUserDeviceId
                         };
         
-                    return sendResult(res,result);
+                    return sendResult(
+                        res,
+                        result
+                    );
                 }
             catch(error)
                 {
-                    return processError(res,error);
+                    return processError(
+                        res,
+                        error
+                    );
                 }
         }
-)
+);
 
 //check for authorization with userDeviceId
 app.post('/device/setInfo',
@@ -207,9 +291,7 @@ app.post('/device/setInfo',
         {
             try 
                 {
-
-                    const body = await req.json();
-                    const userdeviceId = body.userdeviceId;
+                    const userdeviceId = req.body.userdeviceId;
                     const title = body.title;
         
                     const updatedUserDeviceResule = await userDeviceServices.editUserDeviceTitle(
@@ -222,14 +304,22 @@ app.post('/device/setInfo',
                             result: updatedUserDeviceResule
                         };
         
-                    return sendResult(res,result);
+                    return sendResult(
+                        res,
+                        result
+                    );
                 }
             catch(error)
                 {
-                    return processError(res,error);
+                    return processError(
+                        res,
+                        error
+                    );
                 }
         }
-)
+);
+
+
 
 function sendResult
 (
@@ -246,6 +336,7 @@ function processError(
 )
     {
         console.log(error);
+        Sentry.captureException(error);
         res.status(400).json(
             {
                 message: error.message 

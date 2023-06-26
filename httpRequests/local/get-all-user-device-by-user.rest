@@ -1,0 +1,4 @@
+curl 
+--request GET
+--url http://localhost:3001/userDevice/getAllByUser
+--header 'token:6017dfc63eaae1044107172f'

@@ -1,11 +1,18 @@
-module.exports = function buildGetAllUserDeviceByDevice(dataAccess){
+module.exports = function buildGetAllUserDeviceByDevice
+(
+    dataAccess
+)
+    {
 
-    return async function getAllUserDeviceByDevice(
-        deviceId
-    ){
-        const userDeviceList = await dataAccess.dataApi.getAllUserDeviceByDevice(
+        return async function getAllUserDeviceByDevice
+        (
             deviceId
         )
-        return userDeviceList;        
+            {
+                const userDeviceList = await dataAccess.dataClient.getAllUserdeviceByDevice(
+                    deviceId
+                );
+                
+                return userDeviceList;        
+            }
     }
-}

@@ -11,8 +11,14 @@ module.exports = function buildSetup
             manufactureId
         )
             {
-                const foundDevice = await dataAccess.dataApi.getDeviceByManufactureId(manufactureId);
-                if(foundDevice)
+                const foundDevice = await dataAccess.dataApi.getDeviceByManufactureId(
+                    manufactureId
+                );
+
+                if
+                (
+                    foundDevice
+                )
                     {
                         const foundExistingUserDevice = await dataAccess.dataApi.getUserDeviceByDeviceAndUser(
                             foundDevice._id,
@@ -24,7 +30,8 @@ module.exports = function buildSetup
                             foundExistingUserDevice
                         )
                             {
-                                if(
+                                if
+                                (
                                     foundExistingUserDevice.isOwner == true  
                                 )
                                     {
@@ -46,9 +53,16 @@ module.exports = function buildSetup
                                     isAdmin: true,
                                     isMonitor: true,
                                     isArchiver: true
-                                }
-                                const userDevice = userDeviceServices.makeUserDevice(userDeviceInfo);
-                                const addedUserDeviceId = await dataAccess.dataApi.addUserDevice(userDevice);
+                                };
+
+                                const userDevice = userDeviceServices.makeUserDevice(
+                                    userDeviceInfo
+                                );
+
+                                const addedUserDeviceId = await dataAccess.dataApi.addUserDevice(
+                                    userDevice
+                                );
+                                
                                 return addedUserDeviceId;
                             }
                     }

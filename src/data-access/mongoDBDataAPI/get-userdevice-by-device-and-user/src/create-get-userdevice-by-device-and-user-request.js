@@ -23,6 +23,7 @@ module.exports =  function buildCreateGetAllUserDeviceByDeviceAndUserRequest(api
                 }
                 
             },
+            
             {
                 "$lookup" : {
                     from: "devices",
