@@ -2,8 +2,11 @@ const buildTranslateAddUserResponse = require('./src/translate-add-user-response
 const buildCreateAddUserOptions = require('./src/create-add-user-options');
 const buildAddUser = require('./src/add-user');
 
-module.exports = function(
-    getDb
+module.exports = function
+(
+    {
+        getDb
+    }
 )
     {
         
@@ -12,9 +15,11 @@ module.exports = function(
         const createAddUserOptions = buildCreateAddUserOptions();
 
         const addUser = buildAddUser(
-            getDb,
-            createAddUserOptions,
-            translateAddUserResponse
+            {
+                getDb: getDb,
+                createOptions: createAddUserOptions,
+                translateResponse: translateAddUserResponse
+            }
         );
 
         const services = Object.freeze(

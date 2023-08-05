@@ -1,16 +1,38 @@
 module.exports = function buildDeleteUserDevice
 (
-    dataAccess
+    {
+        deleteUserDeviceDB
+    }
 )
     {
 
-        return async function deleteUserDevice
+        if
         (
-            userDeviceId
+            !deleteUserDeviceDB
         )
             {
-                const response = await dataAccess.dataApi.deleteUserDevice(
-                    userDeviceId
+                throw new Error("buildDeleteUserDevice must have an deleteUserDeviceDB");
+            }
+
+        return async function deleteUserDevice
+        (
+            {
+                userDeviceId
+            }
+        )
+            {
+                if
+                (
+                    !userDeviceId
+                )
+                    {
+                        throw new Error("deleteUserDevice must have an userDeviceId");
+                    }
+                    
+                const response = await deleteUserDeviceDB(
+                    {
+                        userDeviceId: userDeviceId
+                    }
                 );
                 
                 return response;        

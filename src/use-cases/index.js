@@ -11,9 +11,6 @@ const buildSetup = require('./setup');
 
 
 module.exports = function(
-    MONGODB_DATAAPI_APPID,
-    MONGODB_DATAAPI_APIKEY,
-    proxyUrl,
     {
         MONGODB_URI,
         DATABASE_NAME
@@ -21,28 +18,73 @@ module.exports = function(
 )
     {
 
+        const models = require('../userdevice');
+
         const dataAccess = require('../data-access')(
-            MONGODB_DATAAPI_APPID,
-            MONGODB_DATAAPI_APIKEY,
-            proxyUrl,
             {
                 MONGODB_URI: MONGODB_URI,
                 DATABASE_NAME: DATABASE_NAME
             }
         )
 
-        const addUserDevice = buildAddUserDevice(dataAccess);
-        const editUserDevicePermission = buildEditUserDevicePermission(dataAccess);
-        const deleteUserDevice = buildDeleteUserDevice(dataAccess);
-        const getAllUserDeviceByDevice = buildGetAllUserDeviceByDevice(dataAccess);
-        const getAllUserDeviceByUser = buildGetAllUserDeviceByUser(dataAccess);
-        const getUserdeviceByDeviceAndUser = buildGetUserdeviceByDeviceAndUser(
-            dataAccess.dataClient.getUserdeviceByDeviceAndUser
+        const addUserDevice = buildAddUserDevice(
+            {
+                addUserDB: dataAccess.dataClient.user.addUser,
+                addUserDeviceDB:dataAccess.dataClient.userDevice.addUserDevice,
+                getUserByMobileNumberDB: dataAccess.dataClient.user.getUserByMobileNumber,
+                getUserDeviceByDeviceAndUserDB: dataAccess.dataClient.userDevice.getUserdeviceByDeviceAndUser,
+                makeUser: models.makeUser,
+                makeUserDevice: models.makeUserDevice
+            }
         );
-        const editUserDeviceTitle = buildEditUserDeviceTitle(dataAccess);
-        const setup = buildSetup(dataAccess);
 
-        return Object.freeze(
+        const editUserDevicePermission = buildEditUserDevicePermission(
+            {
+                editUserDevicePermissionDB: dataAccess.dataClient.userDevice.editUserDevicePermission
+            }
+        );
+
+        const deleteUserDevice = buildDeleteUserDevice(
+            {
+                deleteUserDeviceDB: dataAccess.dataClient.userDevice.deleteUserDevice
+            }
+        );
+
+        
+        const getAllUserDeviceByDevice = buildGetAllUserDeviceByDevice(
+            {
+                getAllUserdeviceByDeviceDB: dataAccess.dataClient.userDevice.getAllUserdeviceByDevice
+            }
+        );
+
+        
+        const getAllUserDeviceByUser = buildGetAllUserDeviceByUser(
+            {
+
+                getAllUserdeviceByUserDB: dataAccess.dataClient.userDevice.getAllUserdeviceByUser
+            }
+        );
+        const getUserdeviceByDeviceAndUser = buildGetUserdeviceByDeviceAndUser(
+            {
+                getUserdeviceByDeviceAndUserDB: dataAccess.dataClient.userDevice.getUserdeviceByDeviceAndUser
+            }
+        );
+        const editUserDeviceTitle = buildEditUserDeviceTitle(
+            {
+                editUserDeviceTitleDB: dataAccess.dataClient.userDevice.editUserdeviceTitle
+            }
+        );
+        
+        const setup = buildSetup(
+            {
+                addUserDeviceDB: dataAccess.dataClient.userDevice.addUserDevice,
+                getDeviceByManufactureIdDB: dataAccess.dataClient.device.getDeviceByManufactureId,
+                getUserDeviceByDeviceAndUserDB: dataAccess.dataClient.userDevice.getUserdeviceByDeviceAndUser,
+                makeUserDevice: models.makeUserDevice
+            }
+        );
+
+        const servies =  Object.freeze(
             {
                 addUserDevice,
                 editUserDevicePermission,
@@ -54,4 +96,6 @@ module.exports = function(
                 setup
             }
         );
+
+        return servies;
     }

@@ -1,13 +1,35 @@
 module.exports = function buildCreateGetAllUserdeviceByUserOptions
 (
-    mongoDBDriver
+    {
+        mongoDBDriver
+    }
 )
     {
-        return function createGetAllUserdeviceByUserOptions
+        if
         (
-            userId
+            !mongoDBDriver
         )
             {
+                throw new Error("buildCreateGetAllUserdeviceByUserOptions must have an mongoDBDriver");
+            }
+
+        return function createGetAllUserdeviceByUserOptions
+        (
+            {
+                userId
+            }
+        )
+            {
+                if
+                (
+                    !userId
+                )
+                    {
+                        throw new Error("createGetAllUserdeviceByUserOptions must have an userId");
+                    }
+
+                console.log(userId);
+
                 const userObjectId = mongoDBDriver.ObjectID(
                     userId
                 );

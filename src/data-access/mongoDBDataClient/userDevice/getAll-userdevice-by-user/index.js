@@ -2,22 +2,29 @@ const buildTranslateGetAllUserdeviceByUserResponse = require('./src/translate-ge
 const buildCreateGetAllUserdeviceByUserOptions = require('./src/create-getAll-userdevice-by-user-options');
 const buildGetAllUserdeviceByUser = require('./src/getAll-userdevice-by-user');
 
-module.exports = function(
-    mongoDBDriver,
-    getDb
+module.exports = function
+(
+    {
+        mongoDBDriver,
+        getDb
+    }
 )
     {
         
         const translateGetAllUserdeviceByUserResponse = buildTranslateGetAllUserdeviceByUserResponse();
 
         const createGetAllUserdeviceByUserOptions = buildCreateGetAllUserdeviceByUserOptions(
-            mongoDBDriver
+            {
+                mongoDBDriver: mongoDBDriver
+            }
         );
 
         const getAllUserdeviceByUser = buildGetAllUserdeviceByUser(
-            getDb,
-            createGetAllUserdeviceByUserOptions,
-            translateGetAllUserdeviceByUserResponse
+            {
+                getDb: getDb,
+                createOptions:createGetAllUserdeviceByUserOptions,
+                translateResponse: translateGetAllUserdeviceByUserResponse
+            }
         );
 
         const services = Object.freeze(

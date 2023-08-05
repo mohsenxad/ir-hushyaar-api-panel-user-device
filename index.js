@@ -89,7 +89,9 @@ app.get('/userDevice/getAllByUser',
                     const userId = req.user;
 
                     const userDeviceList = await userDeviceServices.getAllUserDeviceByUser(
-                        userId
+                        {
+                            userId: userId
+                        }
                     );
 
                     var result = {
@@ -123,8 +125,10 @@ app.get('/userDevice/getByUserAndDevice',
                 const deviceId = req.headers.deviceid;
 
                 const userDevice = await userDeviceServices.getUserdeviceByDeviceAndUser(
-                    deviceId,
-                    userId
+                    {
+                        deviceId: deviceId,
+                        userId: userId
+                    }
                 );
 
                 const result = {
@@ -157,7 +161,9 @@ app.get('/userDevice/getByDevice',
                     const deviceId = req.headers.deviceid;
 
                     const userDeviceList = await userDeviceServices.getAllUserDeviceByDevice(
-                        deviceId
+                        {
+                            deviceId: deviceId
+                        }
                     );
 
                     const result = {
@@ -191,7 +197,9 @@ app.post('/userDevice/remove',
                     const userDeviceId = req.body.userDeviceId;
 
                     const deleteResult = await userDeviceServices.deleteUserDevice(
-                        userDeviceId
+                        {
+                            userDeviceId: userDeviceId
+                        }
                     );
 
                     const result = {
@@ -225,9 +233,11 @@ app.post('/userDevice/add',
 					const userDeviceInfo = req.body;
 
 					const addResult = await userDeviceServices.addUserDevice(
-						req.user,
-						deviceId,
-						userDeviceInfo
+                        {
+                            userId: req.user,
+                            deviceId: deviceId,
+                            userDeviceInfo: userDeviceInfo
+                        }
 					);
 
 					const result = 
@@ -260,8 +270,10 @@ app.post('/device/setup',
                     const manufactureId = req.body.manufactureId;
         
                     const addedUserDeviceId = await userDeviceServices.setup(
-                        userId,
-                        manufactureId
+                        {
+                            userId: userId,
+                            manufactureId: manufactureId
+                        }
                     );
 
                     const result =
@@ -284,19 +296,18 @@ app.post('/device/setup',
         }
 );
 
-//check for authorization with userDeviceId
 app.post('/device/setInfo',
     auth.chechAuth,
     async (req, res) =>
         {
             try 
                 {
-                    const userdeviceId = req.body.userdeviceId;
-                    const title = body.title;
+                    const editUserDeviceTitleInfo = req.body;
         
                     const updatedUserDeviceResule = await userDeviceServices.editUserDeviceTitle(
-                        userdeviceId,
-                        title
+                        {
+                            editUserDeviceTitleInfo : editUserDeviceTitleInfo
+                        }
                     );
 
                     const result =

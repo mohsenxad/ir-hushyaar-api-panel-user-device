@@ -1,16 +1,38 @@
 module.exports = function buildGetAllUserDeviceByDevice
 (
-    dataAccess
+    {
+        getAllUserdeviceByDeviceDB
+    }
 )
     {
 
-        return async function getAllUserDeviceByDevice
+        if
         (
-            deviceId
+            !getAllUserdeviceByDeviceDB
         )
             {
-                const userDeviceList = await dataAccess.dataClient.getAllUserdeviceByDevice(
-                    deviceId
+                throw new Error("buildGetAllUserDeviceByDevice must have an getAllUserdeviceByDeviceDB");
+            }
+
+        return async function getAllUserDeviceByDevice
+        (
+            {
+                deviceId
+            }
+        )
+            {
+                if
+                (
+                    !deviceId
+                )
+                    {
+                        throw new Error("getAllUserDeviceByDevice must have an deviceId");
+                    }
+
+                const userDeviceList = await getAllUserdeviceByDeviceDB(
+                    {
+                        deviceId: deviceId
+                    }
                 );
                 
                 return userDeviceList;        

@@ -1,6 +1,8 @@
 module.exports = function buildCreateGetAllUserdeviceByDeviceOptions
 (
-    mongoDBDriver
+    {
+        mongoDBDriver
+    }
 )
     {
         if
@@ -13,9 +15,19 @@ module.exports = function buildCreateGetAllUserdeviceByDeviceOptions
         
         return function createGetAllUserdeviceByDeviceOptions
         (
-            deviceId
+            {
+                deviceId
+            }
         )
             {
+                if
+                (
+                    !deviceId
+                )
+                    {
+                        throw new Error("createGetAllUserdeviceByDeviceOptions must have an deviceId");
+                    }
+                    
                 const deviceObjectId = mongoDBDriver.ObjectID(
                     deviceId
                 );

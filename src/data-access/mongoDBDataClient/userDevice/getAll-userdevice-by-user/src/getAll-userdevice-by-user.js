@@ -1,15 +1,43 @@
 module.exports = function buildGetAllUserdeviceByUser
 (
-    getDb,
-    createGetAllUserdeviceByUserOptions,
-    translateGetAllUserdeviceByUserResponse
+    {
+        getDb,
+        createOptions,
+        translateResponse
+    }
 )
     {
+        if
+        (
+            !getDb
+        )
+            {
+                throw new Error("buildGetAllUserdeviceByUser must have an getDb");
+            }
+
+        if
+        (
+            !createOptions
+        )
+            {
+                throw new Error("buildGetAllUserdeviceByUser must have an createOptions");
+            }
+
+        if
+        (
+            !translateResponse
+        )
+            {
+                throw new Error("buildGetAllUserdeviceByUser must have an translateResponse");
+            }
+
         const COLLECTION_NAME = 'userdevices';
 
         return async function getAllUserdeviceByUser
         (
-            userId
+            {
+                userId
+            }
         )
             {
                 const db = await getDb();
@@ -18,16 +46,20 @@ module.exports = function buildGetAllUserdeviceByUser
                     COLLECTION_NAME
                 );
 
-                const options = createGetAllUserdeviceByUserOptions(
-                    userId
+                const options = createOptions(
+                    {
+                        userId: userId
+                    }
                 );
 
                 const response = await collection.aggregate(
                     options.pipeline
                 ).toArray();
 
-                const result = translateGetAllUserdeviceByUserResponse(
-                    response
+                const result = translateResponse(
+                    {
+                        response: response
+                    }
                 );
 
                 return result;

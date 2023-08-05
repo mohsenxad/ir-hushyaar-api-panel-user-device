@@ -3,21 +3,27 @@ const buildCreateGetAllUserdeviceByDeviceOptions = require('./src/create-getAll-
 const buildGetAllUserdeviceByDevice = require('./src/getAll-userdevice-by-device');
 
 module.exports = function(
-    mongoDBDriver,
-    getDb
+    {
+        mongoDBDriver,
+        getDb
+    }
 )
     {
         
         const translateGetAllUserdeviceByDeviceResponse = buildTranslateGetAllUserdeviceByDeviceResponse();
 
         const createGetAllUserdeviceByDeviceOptions = buildCreateGetAllUserdeviceByDeviceOptions(
-            mongoDBDriver
+            {
+                mongoDBDriver: mongoDBDriver
+            }
         );
 
         const getAllUserdeviceByDevice = buildGetAllUserdeviceByDevice(
-            getDb,
-            createGetAllUserdeviceByDeviceOptions,
-            translateGetAllUserdeviceByDeviceResponse
+            {
+                getDb:getDb,
+                createOptions: createGetAllUserdeviceByDeviceOptions,
+                translateResponse: translateGetAllUserdeviceByDeviceResponse
+            }
         );
 
         const services = Object.freeze(

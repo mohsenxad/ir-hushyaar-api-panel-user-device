@@ -1,18 +1,72 @@
-const userDeviceServices = require('../userdevice');
-
 module.exports = function buildSetup
 (
-    dataAccess
+    {
+        getDeviceByManufactureIdDB,
+        getUserDeviceByDeviceAndUserDB,
+        addUserDeviceDB,
+        makeUserDevice
+    }
 )
     {
-        return async function setup
+        if
         (
-            userId,
-            manufactureId
+            !getDeviceByManufactureIdDB
         )
             {
-                const foundDevice = await dataAccess.dataApi.getDeviceByManufactureId(
-                    manufactureId
+                throw new Error("buildSetup must have an getDeviceByManufactureIdDB");
+            }
+
+        if
+        (
+            !getUserDeviceByDeviceAndUserDB
+        )
+            {
+                throw new Error("buildSetup must have an getUserDeviceByDeviceAndUserDB");
+            }
+
+        if
+        (
+            !addUserDeviceDB
+        )
+            {
+                throw new Error("buildSetup must have an addUserDeviceDB");
+            }
+
+        if
+        (
+            !makeUserDevice
+        )
+            {
+                throw new Error("buildSetup must have an makeUserDevice");
+            }
+        return async function setup
+        (
+            {
+                userId,
+                manufactureId
+            }
+        )
+            {
+                if
+                (
+                    !userId
+                )
+                    {
+                        throw new Error("setup must have an userId");
+                    }
+
+                if
+                (
+                    !manufactureId
+                )
+                    {
+                        throw new Error("setup must have an manufactureId");
+                    }
+                    
+                const foundDevice = await getDeviceByManufactureIdDB(
+                    {
+                        manufactureId: manufactureId
+                    }
                 );
 
                 if
@@ -20,9 +74,11 @@ module.exports = function buildSetup
                     foundDevice
                 )
                     {
-                        const foundExistingUserDevice = await dataAccess.dataApi.getUserDeviceByDeviceAndUser(
-                            foundDevice._id,
-                            userId
+                        const foundExistingUserDevice = await getUserDeviceByDeviceAndUserDB(
+                            {
+                                deviceId: foundDevice._id,
+                                userId: userId
+                            }
                         );
 
                         if
@@ -59,8 +115,10 @@ module.exports = function buildSetup
                                     userDeviceInfo
                                 );
 
-                                const addedUserDeviceId = await dataAccess.dataApi.addUserDevice(
-                                    userDevice
+                                const addedUserDeviceId = await addUserDeviceDB(
+                                    {
+                                        userDevice: userDevice
+                                    }
                                 );
                                 
                                 return addedUserDeviceId;

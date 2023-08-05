@@ -10,23 +10,6 @@ module.exports  = function
 )
     {
 
-        if
-        (
-            !MONGODB_URI
-        )
-            {
-                throw new Error("MongoDB Client must have an MONGODB_URI");
-            }
-
-        if
-        (
-            !DATABASE_NAME
-        )
-            {
-                throw new Error("MongoDB Client must have an DATABASE_NAME");
-            }
-
-
         const {  getDb } = require('./get-db')
             (
                 {
@@ -36,40 +19,35 @@ module.exports  = function
                 }
             );
 
-        const { getAllUserdeviceByUser } = require('./userDevice/getAll-userdevice-by-user')
-        (
-            mongoDBDriver,
-            getDb
+       
+        const userDeviceServices = require('./userDevice')(
+            {
+                getDb: getDb,
+                mongoDBDriver: mongoDBDriver
+            }
         );
 
-        
-        const { getAllUserdeviceByDevice } = require('./userDevice/getAll-userdevice-by-device')
-        (
-            mongoDBDriver,
-            getDb
-        );
+        const userServices = require('./user')(
+            {
+                getDb: getDb,
+                mongoDBDriver: mongoDBDriver
+            }
+        )
 
-        
-        const { getUserdeviceByDeviceAndUser } = require('./userDevice/get-userdevice-by-device-and-user')
-        (
-            mongoDBDriver,
-            getDb
-        );
-
-        
-        const { addUser } = require('./user/add-user')
-        (
-            getDb
-        );
+        const deviceServices = require('./device')(
+            {
+                getDb: getDb,
+                mongoDBDriver: mongoDBDriver
+            }
+        )
         
         
         
         const services = Object.freeze(
             {
-                getAllUserdeviceByUser,
-                getAllUserdeviceByDevice,
-                getUserdeviceByDeviceAndUser,
-                addUser
+                userDevice: userDeviceServices,
+                device: deviceServices,
+                user: userServices
             }
         );
 

@@ -1,31 +1,23 @@
-module.exports =  function(
-    APPID,
-    APIKEY,
-    proxyUrl,
+module.exports =  function
+(
     {
         MONGODB_URI,
         DATABASE_NAME
     }
-){
-    const dataApi = require('./mongoDBDataAPI')
-    (
-        APPID,
-        APIKEY,
-        proxyUrl
-    );
+)
+    {
 
-    const dataClient = require('./mongoDBDataClient')
-        (
+        const dataClient = require('./mongoDBDataClient')
+            (
+                {
+                    DATABASE_NAME:DATABASE_NAME,
+                    MONGODB_URI: MONGODB_URI,
+                }
+            )
+
+        return Object.freeze(
             {
-                DATABASE_NAME:DATABASE_NAME,
-                MONGODB_URI: MONGODB_URI,
+                dataClient
             }
-        )
-
-    return Object.freeze(
-        {
-            dataApi,
-            dataClient
-        }
-    );
-}
+        );
+    }

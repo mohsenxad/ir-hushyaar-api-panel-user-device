@@ -1,18 +1,61 @@
 module.exports = function buildEditUserDevicePermission
 (
-    dataAccess
+    {
+        editUserDevicePermissionDB
+    }
 )
     {
+        if
+        (
+            !editUserDevicePermissionDB
+        )
+            {
+                throw new Error("buildEditUserDevicePermission must have an editUserDevicePermissionDB");
+            }
 
         return async function editUserDevicePermission
         (
-            userDeviceId,
-            isAdmin,
-            isMonitor,
-            isArchiver,
+            {
+                userDeviceId,
+                isAdmin,
+                isMonitor,
+                isArchiver
+            }
         )
             {
-                const response = await dataAccess.dataApi.editUserDevicePermission(
+                if
+                (
+                    !userDeviceId
+                )
+                    {
+                        throw new Error("editUserDevicePermission must have an userDeviceId");
+                    }
+
+                if
+                (
+                    typeof isAdmin === undefined
+                )
+                    {
+                        throw new Error("editUserDevicePermission must have an isAdmin");
+                    }
+
+                if
+                (
+                    typeof isMonitor === undefined
+                )
+                    {
+                        throw new Error("editUserDevicePermission must have an isMonitor");
+                    }
+
+                if
+                (
+                    typeof isArchiver === undefined
+                )
+                    {
+                        throw new Error("editUserDevicePermission must have an isArchiver");
+                    }
+                    
+                const response = await editUserDevicePermissionDB(
                     userDeviceId,
                     isAdmin,
                     isMonitor,
